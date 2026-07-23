@@ -1,0 +1,4 @@
+interface:
+  display_name: "Independent Verification"
+  short_description: "Evidence-first QA across artifacts and operations"
+  default_prompt: "Use $independent-verification to verify this completed work and return PASS, FAIL, or BLOCKED with durable evidence."

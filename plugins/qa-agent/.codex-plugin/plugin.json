@@ -1,0 +1,32 @@
+{
+  "name": "qa-agent",
+  "version": "0.1.0",
+  "description": "Evidence-first independent QA for code, UI, documents, data, and operational changes.",
+  "author": {
+    "name": "2x Growth Agency",
+    "url": "https://github.com/2xgrowthagency"
+  },
+  "homepage": "https://github.com/2xgrowthagency/independent-qa-agent",
+  "repository": "https://github.com/2xgrowthagency/independent-qa-agent",
+  "license": "MIT",
+  "keywords": [
+    "qa",
+    "verification",
+    "codex",
+    "agent-skill"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Independent QA Agent",
+    "shortDescription": "Verify completed work from raw evidence.",
+    "longDescription": "Run read-only, evidence-first QA across code, browser and UI behavior, documents, data artifacts, and operational proof. Return exactly PASS, FAIL, or BLOCKED.",
+    "developerName": "2x Growth Agency",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "Independently verify this completed work.",
+      "Run QA and return PASS, FAIL, or BLOCKED.",
+      "Check this change without fixing it."
+    ]
+  }
+}
