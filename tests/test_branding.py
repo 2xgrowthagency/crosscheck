@@ -8,8 +8,27 @@ import unittest
 
 from test_gate import GateFixture, MemoryTransport, ROOT
 
+EXAMPLE_ROOT = ROOT / "examples/comments"
+
 
 class BrandingTests(GateFixture, unittest.TestCase):
+    def test_example_fail_and_blocked_reports_bind_their_distinct_scenarios(self):
+        from crosscheck.report import report
+        scenarios = (
+            ("fail", "The second click incorrectly remained at Step 1.",
+             "Demo producer: repair the second transition only, then request a fresh check.", ["screen", "sequence"]),
+            ("blocked", "No safe ordered trace was available.",
+             "Verification owner: provide a synthetic interaction surface or safe trace.", []),
+        )
+        for status, observation, action, artifacts in scenarios:
+            with self.subTest(status=status):
+                self.m["checks"][0].update(status=status, observation=observation,
+                                           action=action, artifact_ids=artifacts)
+                expected = self.evaluate()
+                stored = json.loads((EXAMPLE_ROOT / (status + ".json")).read_text())
+                self.assertEqual(expected, stored)
+                self.assertEqual(report(self.m, expected), (EXAMPLE_ROOT / (status + "-report.md")).read_text())
+
     def test_canonical_runtime_and_legacy_imports_share_the_gate(self):
         canonical = importlib.import_module("crosscheck")
         legacy = importlib.import_module("final_boss")

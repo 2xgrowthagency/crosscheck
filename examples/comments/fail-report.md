@@ -14,15 +14,15 @@ INDEPENDENCE: {"attestation": "SIMULATED session admission for contract tests on
 
 TARGET_FINGERPRINT: 895da7408044a3c67b2228409971c7626fb31152a0b3dd6ddce53f6ad29a1162
 
-EVIDENCE_SNAPSHOT: 7d4767419d7d4ed26c02d4f7dca9ec0ed257844087eb4555371fd2eb2ac94229
+EVIDENCE_SNAPSHOT: a82bf122af8065fbbe5b50c5c5f258d791e7d4019e4aafc82c885808e1832447
 
 CRITERIA_MATRIX: [{"description": "Two clicks reach Step 2 of 2 in order, with current layout proof.", "id": "demo", "profile": "interaction", "required": true, "sequence": true, "viewports": [{"height": 640, "width": 960}], "visual": true}]
 
 CRITERION_TOTALS: {"advisory": {"blocked": 0, "failed": 0, "passed": 0, "total": 0}, "required": {"blocked": 0, "failed": 1, "passed": 0, "total": 1}}
 
-FINDINGS: [{"action": "Correct only the failed step and request fresh verification.", "artifact_ids": ["screen", "sequence"], "code": "required-defect", "criterion_id": "demo", "disposition": "rework", "impact": "The required criterion failed.", "observation": "Observed Step 0, then Step 1, then Step 2 with an isolated synthetic page.", "owner": "demo producer", "severity": "error"}]
+FINDINGS: [{"action": "Demo producer: repair the second transition only, then request a fresh check.", "artifact_ids": ["screen", "sequence"], "code": "required-defect", "criterion_id": "demo", "disposition": "rework", "impact": "The required criterion failed.", "observation": "The second click incorrectly remained at Step 1.", "owner": "demo producer", "severity": "error"}]
 
-INDEPENDENT_CHECKS: [{"action": "Correct only the failed step and request fresh verification.", "artifact_ids": ["screen", "sequence"], "criterion_id": "demo", "id": "two-clicks", "observation": "Observed Step 0, then Step 1, then Step 2 with an isolated synthetic page.", "owner": "demo producer", "status": "fail"}]
+INDEPENDENT_CHECKS: [{"action": "Demo producer: repair the second transition only, then request a fresh check.", "artifact_ids": ["screen", "sequence"], "criterion_id": "demo", "id": "two-clicks", "observation": "The second click incorrectly remained at Step 1.", "owner": "demo producer", "status": "fail"}]
 
 EVIDENCE: [{"artifacts": ["screen", "sequence"], "check": "two-clicks"}]
 

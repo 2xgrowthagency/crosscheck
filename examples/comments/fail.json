@@ -2,7 +2,7 @@
   "schema_version": "1.1",
   "packet_id": "synthetic-demo-001",
   "target_sha256": "895da7408044a3c67b2228409971c7626fb31152a0b3dd6ddce53f6ad29a1162",
-  "manifest_sha256": "7d4767419d7d4ed26c02d4f7dca9ec0ed257844087eb4555371fd2eb2ac94229",
+  "manifest_sha256": "a82bf122af8065fbbe5b50c5c5f258d791e7d4019e4aafc82c885808e1832447",
   "verifier_id": "synthetic-verifier",
   "evaluated_at": "2026-09-07T06:01:51.892836+00:00",
   "expires_at": "2026-09-07T07:01:50.892836+00:00",
@@ -16,13 +16,13 @@
       "owner": "demo producer",
       "severity": "error",
       "disposition": "rework",
-      "observation": "Observed Step 0, then Step 1, then Step 2 with an isolated synthetic page.",
+      "observation": "The second click incorrectly remained at Step 1.",
       "artifact_ids": [
         "screen",
         "sequence"
       ],
       "impact": "The required criterion failed.",
-      "action": "Correct only the failed step and request fresh verification."
+      "action": "Demo producer: repair the second transition only, then request a fresh check."
     }
   ],
   "criterion_totals": {
@@ -59,5 +59,5 @@
       "reason": null
     }
   ],
-  "report_sha256": "8ccee5b0510d13c6d472f9198dd52540bdc1721d7c559e3edd0c8e4a2371ef93"
+  "report_sha256": "7fd1521b4c14f263b69e69bbd5e348163c69b2d3394670e6d08c3f654c1b8765"
 }

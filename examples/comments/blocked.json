@@ -2,7 +2,7 @@
   "schema_version": "1.1",
   "packet_id": "synthetic-demo-001",
   "target_sha256": "895da7408044a3c67b2228409971c7626fb31152a0b3dd6ddce53f6ad29a1162",
-  "manifest_sha256": "36d4eb2a9f412653b179ac43b97fbb56107ed9e6fe743ab19f80f89ef3dbd57b",
+  "manifest_sha256": "91e1a1c27ce7bf24ed97890d417f0e9f0163177ef82f1199aef1369b58604149",
   "verifier_id": "synthetic-verifier",
   "evaluated_at": "2026-09-07T06:01:51.892836+00:00",
   "expires_at": "2026-09-07T07:01:50.892836+00:00",
@@ -16,13 +16,10 @@
       "owner": "demo producer",
       "severity": "error",
       "disposition": "ask-owner",
-      "observation": "Observed Step 0, then Step 1, then Step 2 with an isolated synthetic page.",
-      "artifact_ids": [
-        "screen",
-        "sequence"
-      ],
+      "observation": "No safe ordered trace was available.",
+      "artifact_ids": [],
       "impact": "Verification cannot safely clear this target.",
-      "action": "Correct only the failed step and request fresh verification."
+      "action": "Verification owner: provide a synthetic interaction surface or safe trace."
     }
   ],
   "criterion_totals": {
@@ -59,5 +56,5 @@
       "reason": null
     }
   ],
-  "report_sha256": "c5d09aed92c470d8549b8a3716fb93597db8f0a8854d375328b864182c86e427"
+  "report_sha256": "774518baba1ad3940ce3d2567b54e40db39e3630c5a1c194f88b88909d275826"
 }
