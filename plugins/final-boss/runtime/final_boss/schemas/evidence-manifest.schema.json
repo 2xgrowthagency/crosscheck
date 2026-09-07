@@ -1,0 +1,463 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://2xgrowthagency.github.io/independent-qa-agent/schemas/evidence-manifest-1.0.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "packet_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "intent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "code",
+            "ui",
+            "interaction",
+            "document",
+            "data",
+            "operations",
+            "decision",
+            "process"
+          ]
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "base": {
+          "type": "string",
+          "minLength": 1
+        },
+        "environment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configuration_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "kind",
+        "locator",
+        "revision",
+        "base",
+        "environment",
+        "configuration_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "session": {
+      "type": "object",
+      "properties": {
+        "producer_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+        },
+        "verifier_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+        },
+        "ephemeral": {
+          "type": "boolean"
+        },
+        "inherited_context": {
+          "type": "boolean"
+        },
+        "target_write_owned": {
+          "type": "boolean"
+        },
+        "target_written": {
+          "type": "boolean"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "finished_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "attestation": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "producer_id",
+        "verifier_id",
+        "ephemeral",
+        "inherited_context",
+        "target_write_owned",
+        "target_written",
+        "started_at",
+        "finished_at",
+        "attestation"
+      ],
+      "additionalProperties": false
+    },
+    "freshness_seconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2592000
+    },
+    "criteria": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "profile": {
+            "enum": [
+              "code",
+              "ui",
+              "interaction",
+              "document",
+              "data",
+              "operations",
+              "decision",
+              "process"
+            ]
+          },
+          "visual": {
+            "type": "boolean"
+          },
+          "sequence": {
+            "type": "boolean"
+          },
+          "viewports": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "width": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "height": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "width",
+                "height"
+              ],
+              "additionalProperties": false
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "description",
+          "required",
+          "profile",
+          "visual",
+          "sequence",
+          "viewports"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+          },
+          "criterion_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+          },
+          "status": {
+            "enum": [
+              "pass",
+              "fail",
+              "blocked"
+            ]
+          },
+          "observation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+            },
+            "minItems": 0
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "action": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "criterion_id",
+          "status",
+          "observation",
+          "artifact_ids",
+          "owner",
+          "action"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]+(?:/[A-Za-z0-9_.-]+)+$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "kind": {
+            "enum": [
+              "test-output",
+              "screenshot",
+              "video",
+              "trace",
+              "render",
+              "reconciliation",
+              "readback",
+              "claim-ledger",
+              "case-results",
+              "log"
+            ]
+          },
+          "origin": {
+            "enum": [
+              "verifier",
+              "producer"
+            ]
+          },
+          "session_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+          },
+          "target_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "captured_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tool": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "name",
+              "version"
+            ],
+            "additionalProperties": false
+          },
+          "sharing": {
+            "enum": [
+              "local-only",
+              "safe-to-share",
+              "redacted"
+            ]
+          },
+          "review": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "unreviewed",
+                  "approved",
+                  "rejected"
+                ]
+              },
+              "reviewer": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "status",
+              "reviewer",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "media": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1
+              },
+              "viewport": {
+                "type": "object",
+                "properties": {
+                  "width": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "height": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "width",
+                  "height"
+                ],
+                "additionalProperties": false
+              },
+              "sequence_proven": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "url",
+              "revision",
+              "viewport",
+              "sequence_proven"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "path",
+          "sha256",
+          "size",
+          "kind",
+          "origin",
+          "session_id",
+          "target_sha256",
+          "captured_at",
+          "tool",
+          "sharing",
+          "review",
+          "media"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "destinations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+          },
+          "kind": {
+            "enum": [
+              "github-pr",
+              "github-issue",
+              "worker-thread"
+            ]
+          },
+          "locator": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authorized": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "locator",
+          "authorized"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "schema_version",
+    "packet_id",
+    "intent",
+    "target",
+    "session",
+    "freshness_seconds",
+    "criteria",
+    "checks",
+    "artifacts",
+    "destinations",
+    "risks"
+  ],
+  "additionalProperties": false
+}

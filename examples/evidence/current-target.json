@@ -1,0 +1,8 @@
+{
+  "kind": "interaction",
+  "locator": "http://127.0.0.1:8765/demo.html",
+  "revision": "7a3419f514da56d5982d5f486ab1c1519653992a446f9226c5bf9ad66e136226",
+  "base": "synthetic-demo-v1",
+  "environment": "local-synthetic",
+  "configuration_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+}

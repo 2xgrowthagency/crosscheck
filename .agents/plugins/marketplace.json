@@ -1,7 +1,7 @@
 {
   "name": "independent-qa-agent",
   "interface": {
-    "displayName": "Independent QA Agent"
+    "displayName": "Final Boss"
   },
   "plugins": [
     {
@@ -12,6 +12,18 @@
       },
       "policy": {
         "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "final-boss",
+      "source": {
+        "source": "local",
+        "path": "./plugins/final-boss"
+      },
+      "policy": {
+        "installation": "NOT_AVAILABLE",
         "authentication": "ON_INSTALL"
       },
       "category": "Productivity"

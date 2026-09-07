@@ -1,0 +1,30 @@
+{
+  "synthetic": true,
+  "url": "http://127.0.0.1:8765/demo.html",
+  "browser_version": "152.0.7977.83",
+  "demo_sha256": "7a3419f514da56d5982d5f486ab1c1519653992a446f9226c5bf9ad66e136226",
+  "viewport": {
+    "width": 960,
+    "height": 640
+  },
+  "steps": [
+    {
+      "step": 0,
+      "action": "load",
+      "observed": "Step 0 of 2",
+      "captured_at": "2026-09-07T00:41:59.413170+00:00"
+    },
+    {
+      "step": 1,
+      "action": "click Check next step",
+      "observed": "Step 1 of 2",
+      "captured_at": "2026-09-07T00:41:59.817900+00:00"
+    },
+    {
+      "step": 2,
+      "action": "click Check next step",
+      "observed": "Step 2 of 2",
+      "captured_at": "2026-09-07T00:41:59.986410+00:00"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+[
+  {
+    "name": "correct-work",
+    "mutation": "none",
+    "verdict": "PASS"
+  },
+  {
+    "name": "required-defect",
+    "mutation": "fail",
+    "verdict": "FAIL"
+  },
+  {
+    "name": "missing-evidence",
+    "mutation": "missing",
+    "verdict": "BLOCKED"
+  },
+  {
+    "name": "stale-target",
+    "mutation": "stale",
+    "verdict": "BLOCKED"
+  },
+  {
+    "name": "misleading-producer",
+    "mutation": "producer",
+    "verdict": "BLOCKED"
+  },
+  {
+    "name": "ordered-interaction-stills",
+    "mutation": "stills",
+    "verdict": "BLOCKED"
+  },
+  {
+    "name": "unreviewed-media",
+    "mutation": "unreviewed",
+    "verdict": "BLOCKED"
+  },
+  {
+    "name": "redaction-bytes-changed",
+    "mutation": "redaction",
+    "verdict": "BLOCKED"
+  },
+  {
+    "name": "self-verification",
+    "mutation": "self",
+    "verdict": "BLOCKED"
+  },
+  {
+    "name": "inherited-conversation",
+    "mutation": "inherited",
+    "verdict": "BLOCKED"
+  },
+  {
+    "name": "expired",
+    "mutation": "expired",
+    "verdict": "BLOCKED"
+  },
+  {
+    "name": "wrong-viewport",
+    "mutation": "viewport",
+    "verdict": "BLOCKED"
+  },
+  {
+    "name": "stale-screenshot",
+    "mutation": "screenshot",
+    "verdict": "BLOCKED"
+  }
+]

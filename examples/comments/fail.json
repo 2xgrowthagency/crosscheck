@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "packet_id": "synthetic-demo-001",
+  "target_sha256": "f1495fe485c979eeb2bd85961d6af410a1ca7255e2963227e1384931783b7386",
+  "manifest_sha256": "c1db50ae48ce9d4e12b6cc11ac3823f6a842a00ef21a64092945e10a856231cd",
+  "verifier_id": "synthetic-verifier",
+  "evaluated_at": "2026-09-07T00:44:35.223712+00:00",
+  "expires_at": "2026-09-07T01:44:35.223712+00:00",
+  "verdict": "FAIL",
+  "gate_cleared": false,
+  "meaning": "A required criterion failed. The named producer owns bounded rework, followed by fresh verification.",
+  "problems": [
+    {
+      "code": "required-defect",
+      "criterion_id": "demo",
+      "owner": "demo producer",
+      "severity": "error",
+      "disposition": "rework",
+      "observation": "The second click incorrectly remained at Step 1.",
+      "artifact_ids": [
+        "screen",
+        "sequence"
+      ],
+      "impact": "The required criterion failed.",
+      "action": "Demo producer: repair the second transition only, then request a fresh check."
+    }
+  ],
+  "publication": [
+    {
+      "destination_id": "pr",
+      "status": "not-authorized",
+      "comment_locator": null,
+      "reason": null
+    },
+    {
+      "destination_id": "issue",
+      "status": "not-authorized",
+      "comment_locator": null,
+      "reason": null
+    },
+    {
+      "destination_id": "worker",
+      "status": "not-authorized",
+      "comment_locator": null,
+      "reason": null
+    }
+  ]
+}

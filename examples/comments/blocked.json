@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "packet_id": "synthetic-demo-001",
+  "target_sha256": "f1495fe485c979eeb2bd85961d6af410a1ca7255e2963227e1384931783b7386",
+  "manifest_sha256": "de7afb53c0f194755bb49a603bff26166cb5fa64fe78313c36aee89beafd827d",
+  "verifier_id": "synthetic-verifier",
+  "evaluated_at": "2026-09-07T00:44:35.223712+00:00",
+  "expires_at": "2026-09-07T01:44:35.223712+00:00",
+  "verdict": "BLOCKED",
+  "gate_cleared": false,
+  "meaning": "The target is not cleared. The named owner must perform the exact unblock action before fresh verification.",
+  "problems": [
+    {
+      "code": "inconclusive-check",
+      "criterion_id": "demo",
+      "owner": "demo producer",
+      "severity": "error",
+      "disposition": "ask-owner",
+      "observation": "No safe ordered trace was available.",
+      "artifact_ids": [],
+      "impact": "Verification cannot safely clear this target.",
+      "action": "Verification owner: provide a synthetic interaction surface or safe trace."
+    }
+  ],
+  "publication": [
+    {
+      "destination_id": "pr",
+      "status": "not-authorized",
+      "comment_locator": null,
+      "reason": null
+    },
+    {
+      "destination_id": "issue",
+      "status": "not-authorized",
+      "comment_locator": null,
+      "reason": null
+    },
+    {
+      "destination_id": "worker",
+      "status": "not-authorized",
+      "comment_locator": null,
+      "reason": null
+    }
+  ]
+}

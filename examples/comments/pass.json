@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "packet_id": "synthetic-demo-001",
+  "target_sha256": "f1495fe485c979eeb2bd85961d6af410a1ca7255e2963227e1384931783b7386",
+  "manifest_sha256": "a6fe49b32f8d6b291ce190539799ed4543f3da96d1b581c971faf3c96bb7484d",
+  "verifier_id": "synthetic-verifier",
+  "evaluated_at": "2026-09-07T00:44:35.223712+00:00",
+  "expires_at": "2026-09-07T01:44:35.223712+00:00",
+  "verdict": "PASS",
+  "gate_cleared": true,
+  "meaning": "Review of this tested workflow; no merge, closure, deployment or mutation authority.",
+  "problems": [],
+  "publication": [
+    {
+      "destination_id": "pr",
+      "status": "not-authorized",
+      "comment_locator": null,
+      "reason": null
+    },
+    {
+      "destination_id": "issue",
+      "status": "not-authorized",
+      "comment_locator": null,
+      "reason": null
+    },
+    {
+      "destination_id": "worker",
+      "status": "not-authorized",
+      "comment_locator": null,
+      "reason": null
+    }
+  ]
+}

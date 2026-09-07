@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "final-boss-verifier"
+version = "0.3.0rc1"
+description = "Exact-target, evidence-first verification contracts"
+requires-python = ">=3.11"
+dependencies = ["jsonschema==4.26.0", "rfc3339-validator==0.1.4"]
+license = "MIT"
+authors = [{name = "2x Growth Agency"}]
+
+[project.scripts]
+final-boss = "final_boss.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["plugins/final-boss/runtime"]
+
+[tool.setuptools.package-data]
+final_boss = ["schemas/*.json", "profiles.json"]
