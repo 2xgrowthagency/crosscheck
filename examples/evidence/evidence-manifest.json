@@ -5,7 +5,7 @@
   "target": {
     "kind": "interaction",
     "locator": "http://127.0.0.1:8765/demo.html",
-    "revision": "7a3419f514da56d5982d5f486ab1c1519653992a446f9226c5bf9ad66e136226",
+    "revision": "a24292d9a877c25306908776204ec3e89d31a872a4414257e67fb04bfed0bea4",
     "base": "synthetic-demo-v1",
     "environment": "local-synthetic",
     "configuration_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
@@ -17,8 +17,8 @@
     "inherited_context": false,
     "target_write_owned": false,
     "target_written": false,
-    "started_at": "2026-09-07T00:41:58+00:00",
-    "finished_at": "2026-09-07T00:44:35.223712+00:00",
+    "started_at": "2026-09-07T06:01:48.816618+00:00",
+    "finished_at": "2026-09-07T06:01:50.892836+00:00",
     "attestation": "SIMULATED session admission for contract tests only. Media was captured by the implementation worker; this is not independent QA."
   },
   "freshness_seconds": 3600,
@@ -56,13 +56,13 @@
     {
       "id": "screen",
       "path": "artifacts/current.png",
-      "sha256": "5da2e72363a11fa6c49cc0afca48be2091b486b6875313f45a7b35775d0aa2ca",
-      "size": 21176,
+      "sha256": "873546cfe7f5183627138ef59d92bb97d438fb3a6ca9ff3e17d116c4db3a21be",
+      "size": 21817,
       "kind": "screenshot",
       "origin": "verifier",
       "session_id": "synthetic-verifier",
-      "target_sha256": "f1495fe485c979eeb2bd85961d6af410a1ca7255e2963227e1384931783b7386",
-      "captured_at": "2026-09-07T00:42:00.212083+00:00",
+      "target_sha256": "895da7408044a3c67b2228409971c7626fb31152a0b3dd6ddce53f6ad29a1162",
+      "captured_at": "2026-09-07T06:01:50.892836+00:00",
       "tool": {
         "name": "Playwright",
         "version": "1.58.0"
@@ -71,11 +71,11 @@
       "review": {
         "status": "approved",
         "reviewer": "fixture-author-reviewed-synthetic-media",
-        "sha256": "5da2e72363a11fa6c49cc0afca48be2091b486b6875313f45a7b35775d0aa2ca"
+        "sha256": "873546cfe7f5183627138ef59d92bb97d438fb3a6ca9ff3e17d116c4db3a21be"
       },
       "media": {
         "url": "http://127.0.0.1:8765/demo.html",
-        "revision": "7a3419f514da56d5982d5f486ab1c1519653992a446f9226c5bf9ad66e136226",
+        "revision": "a24292d9a877c25306908776204ec3e89d31a872a4414257e67fb04bfed0bea4",
         "viewport": {
           "width": 960,
           "height": 640
@@ -86,13 +86,13 @@
     {
       "id": "sequence",
       "path": "artifacts/interaction-trace.json",
-      "sha256": "30b9137106575550ef58c3fc1935010944df06d2e07a79dd4a3fc115ce26f523",
+      "sha256": "04018f070fb9da32c6af14232896a3d0596ca0c64b56fb1008c97cd3744abac7",
       "size": 728,
       "kind": "trace",
       "origin": "verifier",
       "session_id": "synthetic-verifier",
-      "target_sha256": "f1495fe485c979eeb2bd85961d6af410a1ca7255e2963227e1384931783b7386",
-      "captured_at": "2026-09-07T00:42:00.212569+00:00",
+      "target_sha256": "895da7408044a3c67b2228409971c7626fb31152a0b3dd6ddce53f6ad29a1162",
+      "captured_at": "2026-09-07T06:01:50.892836+00:00",
       "tool": {
         "name": "Playwright",
         "version": "1.58.0"
@@ -101,11 +101,11 @@
       "review": {
         "status": "approved",
         "reviewer": "fixture-author-reviewed-synthetic-media",
-        "sha256": "30b9137106575550ef58c3fc1935010944df06d2e07a79dd4a3fc115ce26f523"
+        "sha256": "04018f070fb9da32c6af14232896a3d0596ca0c64b56fb1008c97cd3744abac7"
       },
       "media": {
         "url": "http://127.0.0.1:8765/demo.html",
-        "revision": "7a3419f514da56d5982d5f486ab1c1519653992a446f9226c5bf9ad66e136226",
+        "revision": "a24292d9a877c25306908776204ec3e89d31a872a4414257e67fb04bfed0bea4",
         "viewport": {
           "width": 960,
           "height": 640

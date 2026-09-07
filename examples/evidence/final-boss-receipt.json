@@ -1,11 +1,11 @@
 {
   "schema_version": "1.1",
   "packet_id": "synthetic-demo-001",
-  "target_sha256": "f1495fe485c979eeb2bd85961d6af410a1ca7255e2963227e1384931783b7386",
-  "manifest_sha256": "a6fe49b32f8d6b291ce190539799ed4543f3da96d1b581c971faf3c96bb7484d",
+  "target_sha256": "895da7408044a3c67b2228409971c7626fb31152a0b3dd6ddce53f6ad29a1162",
+  "manifest_sha256": "d8b618697eea3b73bc3d9322ab0cc65cf7f1551dc305ce86e68c3d5cd5b6cc42",
   "verifier_id": "synthetic-verifier",
-  "evaluated_at": "2026-09-07T00:44:35.223712+00:00",
-  "expires_at": "2026-09-07T01:44:35.223712+00:00",
+  "evaluated_at": "2026-09-07T06:01:51.892836+00:00",
+  "expires_at": "2026-09-07T07:01:50.892836+00:00",
   "verdict": "PASS",
   "gate_cleared": true,
   "meaning": "Review of this tested workflow; no merge, closure, deployment or mutation authority.",
@@ -44,5 +44,5 @@
       "reason": null
     }
   ],
-  "report_sha256": "e141b193096aae1080869b6bdb5f8113f101d3f3a067ecd5240cc885067b2d9f"
+  "report_sha256": "5cb49bfb896db3cd3fe0c276bc7aa7601ce314460bdee24d56913fb21c37d0b7"
 }
