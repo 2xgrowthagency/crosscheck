@@ -1,0 +1,84 @@
+{
+  "code": {
+    "evidence_any": [
+      "test-output"
+    ],
+    "inputs": "Exact repository, head, base and CI/runtime environment",
+    "checks": "Changed behavior, regressions and relevant tests",
+    "failure_modes": "Green producer logs or wrong PR head",
+    "stop": "Missing safe runtime or immutable revision",
+    "pass_permits": "Review of this commit only"
+  },
+  "ui": {
+    "evidence_any": [
+      "screenshot"
+    ],
+    "inputs": "Exact URL, deployment, named viewport contract",
+    "checks": "Layout, responsive states, overflow; HTTP/console/network when relevant",
+    "failure_modes": "Stale screenshot or untested viewport",
+    "stop": "Unsafe page or no current capture",
+    "pass_permits": "Review of this deployment and viewports"
+  },
+  "interaction": {
+    "evidence_any": [
+      "trace",
+      "video",
+      "readback"
+    ],
+    "inputs": "Bound application and safe ordered workflow",
+    "checks": "Ordered steps, error paths and resulting state",
+    "failure_modes": "Stills hide intermediate failures",
+    "stop": "No safe trace or recording surface",
+    "pass_permits": "Review of this tested workflow"
+  },
+  "document": {
+    "evidence_any": [
+      "render"
+    ],
+    "inputs": "Source hash, rendered revision and page contract",
+    "checks": "Content, citations, links, pagination and clipping",
+    "failure_modes": "Source correct but render clipped",
+    "stop": "Renderer or source unavailable",
+    "pass_permits": "Review of the bound document"
+  },
+  "data": {
+    "evidence_any": [
+      "reconciliation"
+    ],
+    "inputs": "Dataset hashes, range, schema, units and filters",
+    "checks": "Counts, completeness, formulas, nulls, joins and totals",
+    "failure_modes": "Truncated extraction or mismatched denominator",
+    "stop": "Missing source or permitted data surface",
+    "pass_permits": "Review of this dataset and calculations"
+  },
+  "operations": {
+    "evidence_any": [
+      "readback"
+    ],
+    "inputs": "Service identity, environment, config hash and expected state",
+    "checks": "Persisted state, supported reads and safe dry runs",
+    "failure_modes": "UI implies state that was never persisted",
+    "stop": "Proof would require unauthorized mutation",
+    "pass_permits": "Review of the observed state only"
+  },
+  "decision": {
+    "evidence_any": [
+      "claim-ledger"
+    ],
+    "inputs": "Review content, evidence snapshot and proposed action fingerprints",
+    "checks": "Provenance, recalculation, assumptions, counterevidence and reversibility",
+    "failure_modes": "Confident claims from incomplete or stale sources",
+    "stop": "Missing material evidence or decision threshold",
+    "pass_permits": "Decision-ready for human review; no action authorized"
+  },
+  "process": {
+    "evidence_any": [
+      "case-results"
+    ],
+    "inputs": "Process commit, package/config hashes and exact evaluation corpus",
+    "checks": "False passes/blocks, separation, stale results, media, privacy and rework",
+    "failure_modes": "Instruction keywords mistaken for process behavior",
+    "stop": "Fresh verifier or executable cases unavailable",
+    "pass_permits": "Review of this process version and evaluated cases only"
+  }
+}

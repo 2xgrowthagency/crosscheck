@@ -1,7 +1,7 @@
 {
   "name": "independent-qa-agent",
   "interface": {
-    "displayName": "Independent QA Agent"
+    "displayName": "Crosscheck"
   },
   "plugins": [
     {
@@ -9,6 +9,18 @@
       "source": {
         "source": "local",
         "path": "./plugins/qa-agent"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "crosscheck",
+      "source": {
+        "source": "local",
+        "path": "./plugins/crosscheck"
       },
       "policy": {
         "installation": "AVAILABLE",

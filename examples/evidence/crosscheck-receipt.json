@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.1",
+  "packet_id": "synthetic-demo-001",
+  "target_sha256": "895da7408044a3c67b2228409971c7626fb31152a0b3dd6ddce53f6ad29a1162",
+  "manifest_sha256": "2caf022f86bc7188936fd6dd362a28d765077ee5db08ef1a90f1661ebb029f46",
+  "verifier_id": "synthetic-verifier",
+  "evaluated_at": "2026-09-07T06:01:51.892836+00:00",
+  "expires_at": "2026-09-07T07:01:50.892836+00:00",
+  "verdict": "PASS",
+  "gate_cleared": true,
+  "meaning": "Review of this tested workflow; no merge, closure, deployment or mutation authority.",
+  "problems": [],
+  "criterion_totals": {
+    "required": {
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "blocked": 0
+    },
+    "advisory": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "blocked": 0
+    }
+  },
+  "publication": [
+    {
+      "destination_id": "pr",
+      "status": "not-authorized",
+      "comment_locator": null,
+      "reason": null
+    },
+    {
+      "destination_id": "issue",
+      "status": "not-authorized",
+      "comment_locator": null,
+      "reason": null
+    },
+    {
+      "destination_id": "worker",
+      "status": "not-authorized",
+      "comment_locator": null,
+      "reason": null
+    }
+  ],
+  "report_sha256": "6ed068c23aa7cb23f2e413bf53f95ddc081ea4d953677aa75befbbc26d15092b"
+}

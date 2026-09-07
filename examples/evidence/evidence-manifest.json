@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0",
+  "packet_id": "synthetic-demo-001",
+  "intent": "Verify that the synthetic two-step demo shows its final state and preserves the ordered interaction.",
+  "target": {
+    "kind": "interaction",
+    "locator": "http://127.0.0.1:8765/demo.html",
+    "revision": "a24292d9a877c25306908776204ec3e89d31a872a4414257e67fb04bfed0bea4",
+    "base": "synthetic-demo-v1",
+    "environment": "local-synthetic",
+    "configuration_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "session": {
+    "producer_id": "synthetic-producer",
+    "verifier_id": "synthetic-verifier",
+    "ephemeral": true,
+    "inherited_context": false,
+    "target_write_owned": false,
+    "target_written": false,
+    "started_at": "2026-09-07T06:01:48.816618+00:00",
+    "finished_at": "2026-09-07T06:01:50.892836+00:00",
+    "attestation": "SIMULATED session admission for contract tests only. Media was captured by the implementation worker; this is not independent QA."
+  },
+  "freshness_seconds": 3600,
+  "criteria": [
+    {
+      "id": "demo",
+      "description": "Two clicks reach Step 2 of 2 in order, with current layout proof.",
+      "required": true,
+      "profile": "interaction",
+      "visual": true,
+      "sequence": true,
+      "viewports": [
+        {
+          "width": 960,
+          "height": 640
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "two-clicks",
+      "criterion_id": "demo",
+      "status": "pass",
+      "observation": "Observed Step 0, then Step 1, then Step 2 with an isolated synthetic page.",
+      "artifact_ids": [
+        "screen",
+        "sequence"
+      ],
+      "owner": "demo producer",
+      "action": "Correct only the failed step and request fresh verification."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "screen",
+      "path": "artifacts/current.png",
+      "sha256": "873546cfe7f5183627138ef59d92bb97d438fb3a6ca9ff3e17d116c4db3a21be",
+      "size": 21817,
+      "kind": "screenshot",
+      "origin": "verifier",
+      "session_id": "synthetic-verifier",
+      "target_sha256": "895da7408044a3c67b2228409971c7626fb31152a0b3dd6ddce53f6ad29a1162",
+      "captured_at": "2026-09-07T06:01:50.892836+00:00",
+      "tool": {
+        "name": "Playwright",
+        "version": "1.58.0"
+      },
+      "sharing": "safe-to-share",
+      "review": {
+        "status": "approved",
+        "reviewer": "fixture-author-reviewed-synthetic-media",
+        "sha256": "873546cfe7f5183627138ef59d92bb97d438fb3a6ca9ff3e17d116c4db3a21be"
+      },
+      "media": {
+        "url": "http://127.0.0.1:8765/demo.html",
+        "revision": "a24292d9a877c25306908776204ec3e89d31a872a4414257e67fb04bfed0bea4",
+        "viewport": {
+          "width": 960,
+          "height": 640
+        },
+        "sequence_proven": false
+      }
+    },
+    {
+      "id": "sequence",
+      "path": "artifacts/interaction-trace.json",
+      "sha256": "04018f070fb9da32c6af14232896a3d0596ca0c64b56fb1008c97cd3744abac7",
+      "size": 728,
+      "kind": "trace",
+      "origin": "verifier",
+      "session_id": "synthetic-verifier",
+      "target_sha256": "895da7408044a3c67b2228409971c7626fb31152a0b3dd6ddce53f6ad29a1162",
+      "captured_at": "2026-09-07T06:01:50.892836+00:00",
+      "tool": {
+        "name": "Playwright",
+        "version": "1.58.0"
+      },
+      "sharing": "safe-to-share",
+      "review": {
+        "status": "approved",
+        "reviewer": "fixture-author-reviewed-synthetic-media",
+        "sha256": "04018f070fb9da32c6af14232896a3d0596ca0c64b56fb1008c97cd3744abac7"
+      },
+      "media": {
+        "url": "http://127.0.0.1:8765/demo.html",
+        "revision": "a24292d9a877c25306908776204ec3e89d31a872a4414257e67fb04bfed0bea4",
+        "viewport": {
+          "width": 960,
+          "height": 640
+        },
+        "sequence_proven": true
+      }
+    }
+  ],
+  "destinations": [
+    {
+      "id": "pr",
+      "kind": "github-pr",
+      "locator": "https://github.com/example/demo/pull/1",
+      "authorized": false
+    },
+    {
+      "id": "issue",
+      "kind": "github-issue",
+      "locator": "https://github.com/example/demo/issues/1",
+      "authorized": false
+    },
+    {
+      "id": "worker",
+      "kind": "worker-thread",
+      "locator": "synthetic-producer",
+      "authorized": false
+    }
+  ],
+  "risks": [
+    "Synthetic contract example; does not certify the Crosscheck process or model interpretation."
+  ]
+}

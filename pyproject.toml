@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crosscheck-verifier"
+version = "0.3.0rc1"
+description = "Exact-target, evidence-first verification contracts"
+requires-python = ">=3.11"
+dependencies = ["jsonschema==4.26.0", "rfc3339-validator==0.1.4"]
+license = "MIT"
+authors = [{name = "2x Growth Agency"}]
+
+[project.scripts]
+crosscheck = "crosscheck.__main__:main"
+final-boss = "final_boss.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["plugins/crosscheck/runtime"]
+
+[tool.setuptools.package-data]
+crosscheck = ["schemas/*.json", "profiles.json"]

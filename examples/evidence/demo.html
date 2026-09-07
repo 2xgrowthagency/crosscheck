@@ -1,0 +1,6 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Crosscheck evidence demo</title>
+<style>body{font:20px system-ui;margin:48px;background:#f7f9fc;color:#142135}button{padding:12px 24px;font:inherit}output{display:block;margin-top:24px}</style>
+<h1>Crosscheck evidence demo</h1><p>Synthetic local data only.</p>
+<button type="button" id="advance">Check next step</button><output id="state">Step 0 of 2</output>
+<script>let step=0;document.querySelector("#advance").onclick=()=>{step=Math.min(2,step+1);document.querySelector("#state").textContent=`Step ${step} of 2`;};</script></html>

@@ -1,75 +1,134 @@
-# Independent QA Agent
+# Crosscheck
 
-An evidence-first QA skill for Codex and Claude Code. It independently checks completed work and returns exactly `PASS`, `FAIL`, or `BLOCKED`.
+Crosscheck is the 2x-maintained, open-source verification gate for completed work.
+Its deterministic runtime binds evidence to an exact target and returns `PASS`,
+`FAIL`, or `BLOCKED`. Only PASS clears that target. A later change or expired
+result requires fresh verification. PASS grants no merge, closure, deployment,
+or account-change authority.
 
-The agent is deliberately read-only: it verifies the builder's claims from raw evidence, records durable proof, and recommends the next lane without quietly fixing the product.
+**Release candidate: 0.3.0-rc.1.** The runtime, schemas, approved `$crosscheck`
+skill and four references are packaged for review. Fresh independent QA and
+owner release verification remain required. The existing `qa-agent` plugin and
+`$independent-verification` skill remain unchanged and usable; they do not
+automatically enforce the new runtime.
 
-## What it verifies
+## Install the runtime
 
-- code diffs, tests, builds, and immutable delivery state;
-- browser and UI behavior at named URLs and viewports;
-- rendered documents and PDFs;
-- data schemas, formulas, transformations, and reconciliation totals;
-- operational state through read surfaces, dry runs, logs, and identifiers.
-
-## Install in Codex
-
-```bash
-codex plugin marketplace add 2xgrowthagency/independent-qa-agent
-codex plugin add qa-agent@independent-qa-agent
-```
-
-Start a new Codex task so the installed skill is loaded, then ask:
-
-```text
-Use $independent-verification to QA this completed work using qa-packet.md.
-```
-
-## Install in Claude Code
-
-Clone this repository, then copy the same Agent Skill into a target project:
+Requires Python 3.11 or later. From this repository checkout:
 
 ```bash
-./scripts/install-claude-skill.sh /path/to/target-project
+./scripts/install-runtime.sh .venv-crosscheck
+.venv-crosscheck/bin/crosscheck --help
 ```
 
-This creates:
+The installer creates a new isolated environment and refuses to overwrite an
+existing one. This repository is the canonical source:
+`2xgrowthagency/crosscheck`, renamed from `2xgrowthagency/independent-qa-agent`.
+The Python distribution is `crosscheck-verifier`; no package registry release
+has been published. Install the reviewed checkout, not an assumed registry package.
 
-```text
-/path/to/target-project/.claude/skills/independent-verification/
+## Codex candidate installation
+
+From a reviewed candidate checkout, register that local repository:
+
+```bash
+codex plugin marketplace add /path/to/reviewed-crosscheck-checkout
+codex plugin add crosscheck@independent-qa-agent
 ```
 
-Commit that directory if the whole team should inherit the skill. Claude Code discovers the `SKILL.md` metadata and loads the full instructions when the skill becomes relevant.
+Start a fresh task and invoke `$crosscheck`. This installs the instructions;
+install the runtime separately using the command above. The marketplace retains
+its machine name `independent-qa-agent` to preserve installed references; its
+visible name is Crosscheck. The main-branch marketplace will gain the canonical
+plugin only after the owner releases this candidate.
 
-## Add it to a workflow
+The legacy installation remains `qa-agent@independent-qa-agent`, invoking
+`$independent-verification`. Existing users can keep it alongside Crosscheck.
 
-1. Give the QA agent a complete packet using [examples/qa-packet.md](examples/qa-packet.md).
-2. Run QA in a separate agent/task from the builder.
-3. Keep the tested target immutable: pin a commit, artifact hash, or exact URL and deployment identity.
-4. Route `PASS` to review, `FAIL` to bounded rework, and `BLOCKED` to the owner of the missing input or capability.
+## Claude Code installation
 
-The QA agent never inherits permission to fix, merge, deploy, or publish. Those actions need separate authorization.
-
-## Repository layout
-
-```text
-.agents/plugins/marketplace.json        Codex marketplace
-plugins/qa-agent/                       Codex plugin
-  skills/independent-verification/      Shared Agent Skill
-scripts/install-claude-skill.sh         Project-scoped Claude installer
-examples/qa-packet.md                    Portable task contract
-tests/validate.py                        Dependency-free structural checks
+```bash
+./scripts/install-claude-skill.sh /path/to/target-project crosscheck
 ```
+
+This copies the approved skill and four references into
+`.claude/skills/crosscheck/`. Start a fresh Claude Code session in that project
+and invoke `/crosscheck`. Runtime installation is separate. The installer
+refuses to overwrite existing instructions or copy an incomplete managed package.
+
+Omitting `crosscheck` retains the legacy default: the unchanged
+`.claude/skills/independent-verification/` package, invoked with
+`/independent-verification`. Actual harness discovery and invocation are separate
+checks from Python entry points and filesystem copying; see the
+[isolated harness checks](docs/integrations.md#instruction-discovery).
+
+## Runtime usage
+
+A trusted fresh verifier collects observations and a current target readback.
+The runtime checks those inputs; it does not launch an agent, execute producer
+commands, enforce an operating-system sandbox, or prove that an attestation is true.
+The harness must provide execution separation and a read-only target.
+
+```bash
+crosscheck evaluate \
+  --manifest /path/to/evidence/evidence-manifest.json \
+  --evidence-root /path/to/evidence \
+  --current-target /path/to/current-target.json \
+  --target-root /path/to/read-only-product \
+  --output /path/to/new-private-report-directory
+```
+
+The output contains `qa-report.md`, `evidence-manifest.json`, and
+`crosscheck-receipt.json`. Keep the original artifact bundle alongside the reports;
+manifest artifact paths resolve against `--evidence-root`. A missing receipt means
+an incomplete run. Exit codes are 0 for PASS, 1 for FAIL, and 2 for BLOCKED or an
+invalid/unavailable contract. A malformed contract cannot issue a valid receipt.
+
+Before consuming a stored result, run `crosscheck verify-receipt` with the same
+inputs and `--receipt /path/to/crosscheck-receipt.json`, omitting `--output`.
+It reads `qa-report.md` beside the receipt, or the exact file specified by
+`--report`. Missing or changed report bytes fail closed. Validated PASS, FAIL and
+BLOCKED receipts retain exit codes 0, 1 and 2, respectively; invalid or stale
+inputs return BLOCKED with exit 2. Receipt schema 1.1 requires report hashes and
+criterion totals; pre-release 1.0 receipts cannot clear this revised gate.
+The current-target file must be freshly read by the trusted harness each time.
+Never use a comment, old target snapshot or `gate_cleared` boolean as approval.
+
+The unreleased `final-boss` CLI remains an alias and still writes
+`final-boss-receipt.json`; Python `final_boss` imports share the Crosscheck runtime.
+Stored Final Boss report/receipt pairs remain readable only when their exact
+original bytes, bound target and freshness still validate. New reports and
+comments use Crosscheck; exact legacy comment markers are reconciled in place.
+See the migration matrix for installed legacy skill identities, which remain unchanged.
+
+## Supported targets and evidence
+
+The [profile policy](plugins/crosscheck/runtime/crosscheck/profiles.json) defines
+inputs, checks, evidence, failure modes, stop conditions and PASS meaning for
+code/PR, UI, interactive workflows, documents, data, operations, decisions and
+QA processes. Multiple criteria can use different profiles in one bound target.
+
+See the [contract reference](docs/contracts.md),
+[synthetic screenshot and interaction bundle](examples/evidence),
+[PASS/FAIL/BLOCKED comment examples](examples/comments),
+[integration interfaces](docs/integrations.md), and
+[migration matrix](docs/migration.md).
 
 ## Development
 
 ```bash
-python3 tests/validate.py
-python3 /path/to/plugin-creator/scripts/validate_plugin.py plugins/qa-agent
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python tests/validate.py
+.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python tests/install_smoke.py
+git diff --check
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) before changing verdict semantics or safety boundaries.
+CI checks Python 3.11, 3.12 and 3.14. Optional screenshot recapture uses Playwright
+1.58.0 and `scripts/capture-demo.py`; normal tests replay fixed synthetic bytes
+and never launch a browser, access credentials, or call a model.
+See [contribution and release requirements](CONTRIBUTING.md).
 
-## License
-
-MIT
+[MIT license](LICENSE). Migration behavior derives from John Chan’s public v0.2.1
+implementation; private company instructions are not included.

@@ -1,0 +1,29 @@
+{
+  "name": "crosscheck",
+  "version": "0.3.0-rc.1",
+  "description": "Independent verification instructions and exact-target evidence runtime.",
+  "author": {
+    "name": "2x Growth Agency",
+    "url": "https://github.com/2xgrowthagency"
+  },
+  "interface": {
+    "displayName": "Crosscheck",
+    "shortDescription": "Validate exact targets and durable evidence.",
+    "longDescription": "Verify completed deliverables, decisions and QA processes with fresh evidence, read-only checks and PASS, FAIL or BLOCKED results.",
+    "developerName": "2x Growth Agency",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "Crosscheck"
+    ]
+  },
+  "homepage": "https://github.com/2xgrowthagency/crosscheck",
+  "repository": "https://github.com/2xgrowthagency/crosscheck",
+  "license": "MIT",
+  "keywords": [
+    "qa",
+    "verification",
+    "crosscheck"
+  ],
+  "skills": "./skills/"
+}

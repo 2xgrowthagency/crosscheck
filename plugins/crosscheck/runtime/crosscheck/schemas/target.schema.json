@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://2xgrowthagency.github.io/crosscheck/schemas/target-1.0.json",
+  "type": "object",
+  "properties": {
+    "kind": {
+      "enum": [
+        "code",
+        "ui",
+        "interaction",
+        "document",
+        "data",
+        "operations",
+        "decision",
+        "process"
+      ]
+    },
+    "locator": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "base": {
+      "type": "string",
+      "minLength": 1
+    },
+    "environment": {
+      "type": "string",
+      "minLength": 1
+    },
+    "configuration_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "kind",
+    "locator",
+    "revision",
+    "base",
+    "environment",
+    "configuration_sha256"
+  ],
+  "additionalProperties": false
+}
