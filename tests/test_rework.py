@@ -128,6 +128,84 @@ class ReworkTests(GateFixture, unittest.TestCase):
         self.send(result, body, approval, transport)
         self.assertEqual(1, transport.writes)
 
+    def test_final_read_timeout_retains_written_or_discovered_location_and_retries(self):
+        for verdict in ("pass", "fail", "blocked"):
+            for reuse in (False, True):
+                with self.subTest(verdict=verdict, reuse=reuse):
+                    self.m["checks"][0]["status"] = verdict
+                    receipt, body, approval = self.publication_inputs()
+                    transport = MemoryTransport(copy.deepcopy(self.target))
+                    if reuse:
+                        transport.comments["worker"] = body
+                    original = transport.current_target
+                    reads = 0
+                    def current_target():
+                        nonlocal reads
+                        reads += 1
+                        if reads == 5:
+                            raise TimeoutError("synthetic private readback diagnostic")
+                        return original()
+                    transport.current_target = current_target
+                    result = self.send(receipt, body, approval, transport)
+                    self.assertEqual(5, reads)
+                    self.assertEqual(receipt["verdict"], result["verdict"])
+                    self.assertEqual(receipt["gate_cleared"], result["gate_cleared"])
+                    state = result["publication"][0]
+                    self.assertEqual("failed", state["status"])
+                    self.assertEqual("https://example.test/comments/worker", state["comment_locator"])
+                    self.assertIn("freshness", state["reason"])
+                    regenerated = report(self.m, result).encode()
+                    self.assertNotIn("synthetic private readback diagnostic", json.dumps(result))
+                    self.assertNotIn(b"synthetic private readback diagnostic", regenerated)
+                    self.assertEqual(hashlib.sha256(regenerated).hexdigest(), result["report_sha256"])
+                    self.assertEqual(verdict == "pass", validate_receipt(result, self.m, self.evidence,
+                        self.target, report_bytes=regenerated, now=self.now))
+                    with self.assertRaises(ValueError):
+                        validate_receipt(result, self.m, self.evidence, self.target,
+                            report_bytes=report(self.m, receipt).encode(), now=self.now)
+                    # A fresh retry reconciles the already delivered body without duplication.
+                    again = self.send(result, body, approval, transport)
+                    self.assertEqual("published", again["publication"][0]["status"])
+                    self.assertEqual(state["comment_locator"], again["publication"][0]["comment_locator"])
+                    self.assertEqual(0 if reuse else 1, transport.writes)
+
+    def test_final_read_timeout_marks_all_deliveries_uncertain_and_stale_retry_blocks(self):
+        self.publication_inputs()
+        self.m["destinations"].extend([
+            dict(id="second", kind="worker-thread", locator="synthetic-second", authorized=True),
+            dict(id="private", kind="worker-thread", locator="synthetic-private", authorized=False),
+        ])
+        receipt = self.evaluate()
+        body = summary(self.m, receipt, purpose="Demo", checked="Both steps",
+                       next_action="Owner review", human_action="None")
+        approval = dict(reviewed=True, body_sha256=hashlib.sha256(body.encode()).hexdigest(),
+                        destinations=copy.deepcopy(self.m["destinations"]))
+        transport = MemoryTransport(copy.deepcopy(self.target))
+        original = transport.current_target
+        reads = 0
+        def current_target():
+            nonlocal reads
+            reads += 1
+            if reads == 8:
+                raise TimeoutError("synthetic private readback diagnostic")
+            return original()
+        transport.current_target = current_target
+        result = self.send(receipt, body, approval, transport)
+        self.assertEqual(2, transport.writes)
+        self.assertEqual(["failed", "failed", "not-authorized"],
+                         [state["status"] for state in result["publication"]])
+        locations = [state["comment_locator"] for state in result["publication"]]
+        self.assertEqual(["https://example.test/comments/worker",
+                          "https://example.test/comments/second", None], locations)
+        transport.target["revision"] = "changed-before-retry"
+        again = self.send(result, body, approval, transport)
+        self.assertEqual("BLOCKED", again["verdict"])
+        self.assertFalse(again["gate_cleared"])
+        self.assertEqual(["stale", "stale", "not-authorized"],
+                         [state["status"] for state in again["publication"]])
+        self.assertEqual(locations, [state["comment_locator"] for state in again["publication"]])
+        self.assertEqual(2, transport.writes)
+
     def test_criterion_totals_count_criteria_not_check_rows(self):
         advisory = copy.deepcopy(self.m["criteria"][0])
         advisory.update(id="advisory", required=False)

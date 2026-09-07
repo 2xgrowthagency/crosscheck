@@ -117,5 +117,14 @@ def publish(manifest, receipt, evidence_root, transport, body, approval, *, repo
             # API exceptions may contain auth headers or private content. Never echo them.
             state.update(status="failed",
                          reason="Comment delivery or readback failed; reconcile this destination before retrying.")
-    stale = refresh()
+    try:
+        stale = refresh()
+    except Exception:
+        # A failed final freshness read cannot confirm delivery/closeout. Keep
+        # the product verdict and remote locations, without exposing API text.
+        for state in statuses.values():
+            if state["status"] == "published":
+                state.update(status="failed",
+                             reason="Final freshness readback failed; reconcile this destination before retrying.")
+        return bind_report(manifest, result)
     return stale if stale is not None else bind_report(manifest, result)
