@@ -19,6 +19,8 @@ supersedes its working name:
 The canonical product/package/CLI name is Crosscheck. The repository rename is
 complete; installed legacy marketplace and skill identities remain compatible.
 The existing branch and local execution path remain unchanged for continuity.
-Managed instruction content stays in the existing Crosscheck Workshop proposal.
-This implementation may prepare and test packaging in isolation, but may not
-apply or activate that proposal, install live skills, merge, tag, release or deploy.
+The owner applied the approved Crosscheck Workshop instruction package. This
+implementation is authorized to transfer its five exact files into the canonical
+plugin, wire discovery and test actual harness invocation in isolation. It may
+not edit generated instructions, install live skills, merge, tag, release or
+deploy. Fresh independent process QA belongs to the separate owner.

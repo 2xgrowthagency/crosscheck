@@ -24,9 +24,10 @@ initialization blocker precisely. Do not invent a no-CI exemption.
 
 ## Release gate
 
-Version 0.3.0-rc.1 stages runtime/schema/packaging work. The existing canonical
-Skill Workshop proposal must be integrated by its owner before enabling the new
-skill/plugin. Do not directly edit or install generated skill content in this lane.
+Version 0.3.0-rc.1 includes the approved managed instructions and runtime package.
+Keep the shipped skill and references byte-identical to the applied Workshop
+source. Route procedural corrections through its owner; do not hand-edit generated
+content. Isolated candidate discovery tests do not authorize live activation.
 
 A separate fresh, read-only verifier must evaluate the exact candidate head,
 including live harness separation, profile reasoning, media/privacy behavior,

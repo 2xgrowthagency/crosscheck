@@ -15,7 +15,7 @@ case "$skill_name" in
     source_dir="$repo_dir/plugins/crosscheck/skills/crosscheck"
     for file in SKILL.md references/task-profiles.md references/evidence-bundle.md references/result-publication.md references/runtime-integration.md; do
       if [ ! -s "$source_dir/$file" ]; then
-        echo "BLOCKED: managed Crosscheck skill source is not integrated; the release owner must complete Skill Workshop source integration before instruction installation." >&2
+        echo "BLOCKED: managed Crosscheck skill source is incomplete; use a complete reviewed candidate package." >&2
         exit 2
       fi
     done

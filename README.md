@@ -6,12 +6,11 @@ Its deterministic runtime binds evidence to an exact target and returns `PASS`,
 result requires fresh verification. PASS grants no merge, closure, deployment,
 or account-change authority.
 
-**Release candidate: 0.3.0-rc.1.** The runtime, schemas, tests and migration
-installers are available for review. The canonical `$crosscheck` skill remains
-pending integration through the existing Skill Workshop proposal. The Crosscheck
-marketplace entry is deliberately unavailable until that integration and fresh
-independent QA pass. The existing `qa-agent` plugin and `$independent-verification`
-skill remain unchanged and usable; they do not automatically enforce the new runtime.
+**Release candidate: 0.3.0-rc.1.** The runtime, schemas, approved `$crosscheck`
+skill and four references are packaged for review. Fresh independent QA and
+owner release verification remain required. The existing `qa-agent` plugin and
+`$independent-verification` skill remain unchanged and usable; they do not
+automatically enforce the new runtime.
 
 ## Install the runtime
 
@@ -28,42 +27,40 @@ existing one. This repository is the canonical source:
 The Python distribution is `crosscheck-verifier`; no package registry release
 has been published. Install the reviewed checkout, not an assumed registry package.
 
-## Codex compatibility install
+## Codex candidate installation
 
-The existing published install path remains:
+From a reviewed candidate checkout, register that local repository:
 
 ```bash
-codex plugin marketplace add 2xgrowthagency/crosscheck
-codex plugin add qa-agent@independent-qa-agent
+codex plugin marketplace add /path/to/reviewed-crosscheck-checkout
+codex plugin add crosscheck@independent-qa-agent
 ```
 
-Start a fresh task to load `$independent-verification`. The marketplace retains
+Start a fresh task and invoke `$crosscheck`. This installs the instructions;
+install the runtime separately using the command above. The marketplace retains
 its machine name `independent-qa-agent` to preserve installed references; its
-visible name is Crosscheck. The staged future plugin name is
-`crosscheck@independent-qa-agent`. Do not install it as a working skill until the
-pending source integration is complete. Review checkout/runtime installation
-is separate from the main-branch Codex plugin installation above.
+visible name is Crosscheck. The main-branch marketplace will gain the canonical
+plugin only after the owner releases this candidate.
 
-## Claude Code compatibility install
+The legacy installation remains `qa-agent@independent-qa-agent`, invoking
+`$independent-verification`. Existing users can keep it alongside Crosscheck.
 
-```bash
-./scripts/install-claude-skill.sh /path/to/target-project
-```
-
-This copies the unchanged skill into
-`.claude/skills/independent-verification/` and refuses to overwrite an existing
-installation. Runtime installation is independent and uses the first command
-above. The explicit canonical path is:
+## Claude Code installation
 
 ```bash
-./scripts/install-claude-skill.sh /path/to/isolated-project crosscheck
+./scripts/install-claude-skill.sh /path/to/target-project crosscheck
 ```
 
-It currently returns **BLOCKED** without creating an installation because the
-managed source is not integrated. After the owner supplies the managed skill and
-its four references, it copies that package into `.claude/skills/crosscheck/`.
-Actual Codex/Claude instruction discovery and invocation are separate acceptance
-checks; Python imports, CLI success and a filesystem copy do not prove them.
+This copies the approved skill and four references into
+`.claude/skills/crosscheck/`. Start a fresh Claude Code session in that project
+and invoke `/crosscheck`. Runtime installation is separate. The installer
+refuses to overwrite existing instructions or copy an incomplete managed package.
+
+Omitting `crosscheck` retains the legacy default: the unchanged
+`.claude/skills/independent-verification/` package, invoked with
+`/independent-verification`. Actual harness discovery and invocation are separate
+checks from Python entry points and filesystem copying; see the
+[isolated harness checks](docs/integrations.md#instruction-discovery).
 
 ## Runtime usage
 

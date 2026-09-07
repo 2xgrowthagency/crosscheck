@@ -22,11 +22,12 @@ def main():
         metadata = json.loads((plugin / ".codex-plugin/plugin.json").read_text())
         assert metadata["name"] == plugin.name == entry["name"]
         assert metadata["author"]["name"] == "2x Growth Agency"
-        assert entry["policy"]["installation"] == ("NOT_AVAILABLE" if entry["name"] == "crosscheck" else "AVAILABLE")
+        assert entry["policy"]["installation"] == "AVAILABLE"
         assert entry["policy"]["authentication"] in {"ON_INSTALL", "ON_USE"}
         for field in ("composerIcon", "logo", "logoDark"):
             if field in metadata["interface"]:
                 assert (plugin / metadata["interface"][field]).is_file()
+        assert metadata["skills"] == "./skills/"
         if "skills" in metadata:
             assert (plugin / metadata["skills"]).is_dir()
             for skill in (plugin / metadata["skills"]).glob("*/SKILL.md"):
@@ -34,6 +35,9 @@ def main():
                 parsed = yaml.safe_load(frontmatter)
                 assert parsed["name"] == skill.parent.name
                 assert isinstance(parsed["description"], str) and parsed["description"]
+    canonical = ROOT / "plugins/crosscheck/skills/crosscheck"
+    assert {p.name for p in (canonical / "references").glob("*.md")} == {
+        "task-profiles.md", "evidence-bundle.md", "result-publication.md", "runtime-integration.md"}
     for path in (ROOT / "plugins/crosscheck/runtime/crosscheck/schemas").glob("*.json"):
         Draft202012Validator.check_schema(json.loads(path.read_text()))
     bundle = ROOT / "examples/evidence"

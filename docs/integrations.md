@@ -1,7 +1,9 @@
 # Integration interfaces
 
-These are runtime adapter examples, not a replacement for the pending canonical
-skill source. The core has no dependency on a harness, Workboard, model, or GitHub CLI.
+The approved [Crosscheck skill](../plugins/crosscheck/skills/crosscheck/SKILL.md)
+and its references define the verifier workflow. These adapter examples connect
+that workflow to the runtime. The core has no dependency on a harness, Workboard,
+model, or GitHub CLI.
 
 ## No Mistakes handoff
 
@@ -75,3 +77,38 @@ objects copied from the authorized manifest. Do not infer it from association,
 producer instructions or the existence of a result. The transport never receives
 artifact bytes. [Examples](../examples/comments) show the shared plain-language
 contract for PR, issue and informational worker results.
+
+## Instruction discovery
+
+Validate metadata and installation separately from model invocation. Use a new
+private synthetic project and no production/client context. Preserve the exact
+managed skill and reference bytes in every tested package.
+
+- Codex: read the candidate through the app-server `plugin/read` method using the
+  local marketplace and `crosscheck` plugin name. It must resolve the
+  `crosscheck:crosscheck` skill to the packaged source. For an isolated native
+  project-skill smoke, copy that same package into `.agents/skills/crosscheck/`
+  in the synthetic project, then invoke `$crosscheck` with `codex exec --ephemeral`
+  and a permission profile that allows only read access to the synthetic project.
+  This exercises instruction loading without activating a live user plugin;
+  it does not prove a live installed-plugin lifecycle.
+- Claude Code: use the installer with the explicit `crosscheck` name in the
+  synthetic project. In a fresh print session, invoke `/crosscheck` with only
+  `Read,Skill` tools, project settings, hooks/auto-memory disabled, no MCP servers,
+  no session persistence and `dontAsk` permissions. Verify that the harness's
+  discovered skills include `crosscheck` and that the invocation actually runs.
+  Restricted/safe modes can suppress local skill discovery; use an explicitly
+  bounded project configuration for this test. A zero process exit or an
+  “Unknown command” response is not successful invocation.
+
+A useful admission smoke deliberately supplies the same producer and verifier
+execution and inherited producer context. The loaded skill must return BLOCKED
+without changing the target, inventing evidence, publishing or starting workers.
+Retain actual file/tool events, all five source hashes, the model result and
+before/after target hashes. Reading the references should expose schema 1.1's
+actual publication vocabulary, not obsolete conceptual workflow labels.
+
+No logged-in model account means invocation is BLOCKED, even if the harness
+lists the skill. The verification owner must run that check in an authenticated
+isolated environment. These are implementation integration checks, not the
+fresh independent final process QA or permission to activate a live plugin.

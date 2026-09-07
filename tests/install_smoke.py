@@ -74,9 +74,13 @@ def main():
         before = digest_tree(installed)
         run([ROOT / "scripts/install-claude-skill.sh", project], expected=1)
         assert before == digest_tree(installed)
-        canonical = run([ROOT / "scripts/install-claude-skill.sh", project, "crosscheck"], expected=2)
-        assert "managed Crosscheck skill source" in canonical.stderr
-        assert not (project / ".claude/skills/crosscheck").exists()
+        run([ROOT / "scripts/install-claude-skill.sh", project, "crosscheck"])
+        canonical = project / ".claude/skills/crosscheck"
+        assert digest_tree(ROOT / "plugins/crosscheck/skills/crosscheck") == digest_tree(canonical)
+        (canonical / "user-note.md").write_text("preserve canonical notes")
+        canonical_before = digest_tree(canonical)
+        run([ROOT / "scripts/install-claude-skill.sh", project, "crosscheck"], expected=1)
+        assert canonical_before == digest_tree(canonical)
         assert before == digest_tree(installed)
         for alias in ALIASES:
             env = root / alias
@@ -87,8 +91,8 @@ def main():
             if alias == "crosscheck":
                 exercise_installed_cli(env, root)
             run([ROOT / "scripts/install-runtime.sh", env, alias], expected=1)
-    print("PASS: six runtime migration names; installed Crosscheck/final-boss verdicts, receipt interchange and report tamper rejection; legacy Claude byte equality/overwrite refusal")
-    print("BLOCKED (expected): canonical Crosscheck instruction discovery/invocation; managed source is not integrated. Runtime/packaging proof only.")
+    print("PASS: six runtime migration names; installed Crosscheck/final-boss verdicts, receipt interchange and report tamper rejection; canonical and legacy Claude byte equality/overwrite refusal")
+    print("Instruction discovery/invocation requires the separate actual harness check; these are installation checks.")
 
 
 if __name__ == "__main__": main()

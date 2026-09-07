@@ -1,7 +1,7 @@
 {
   "name": "crosscheck",
   "version": "0.3.0-rc.1",
-  "description": "Crosscheck evidence contracts and exact-target verification runtime. Canonical skill integration pending.",
+  "description": "Independent verification instructions and exact-target evidence runtime.",
   "author": {
     "name": "2x Growth Agency",
     "url": "https://github.com/2xgrowthagency"
@@ -9,11 +9,13 @@
   "interface": {
     "displayName": "Crosscheck",
     "shortDescription": "Validate exact targets and durable evidence.",
-    "longDescription": "Release-candidate runtime for PASS, FAIL and BLOCKED verification contracts. Skill Workshop integration is pending.",
+    "longDescription": "Verify completed deliverables, decisions and QA processes with fresh evidence, read-only checks and PASS, FAIL or BLOCKED results.",
     "developerName": "2x Growth Agency",
     "category": "Productivity",
     "capabilities": [],
-    "defaultPrompt": ["Crosscheck"]
+    "defaultPrompt": [
+      "Crosscheck"
+    ]
   },
   "homepage": "https://github.com/2xgrowthagency/crosscheck",
   "repository": "https://github.com/2xgrowthagency/crosscheck",
@@ -22,5 +24,6 @@
     "qa",
     "verification",
     "crosscheck"
-  ]
+  ],
+  "skills": "./skills/"
 }

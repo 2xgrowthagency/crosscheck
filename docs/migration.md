@@ -26,7 +26,7 @@ There was no `v0.2.1` Git ref at audit time. The personal repository is untouche
 | PR, issue and original worker results | Per-destination status; GitHub adapter and injected worker interface |
 | Legacy publication markers | Exact packet/fingerprint matches accepted; other IDs require owner reconciliation |
 | Workboard/model-specific routing | Optional adapter configuration; no universal model or orchestration dependency |
-| Canonical skill name, instructions and references | Pending existing Skill Workshop proposal integration; unchanged legacy skill remains |
+| Canonical skill name, instructions and references | Approved managed Crosscheck skill and four references integrated unchanged; legacy skill remains |
 
 ## Existing users
 
@@ -43,10 +43,9 @@ There was no `v0.2.1` Git ref at audit time. The personal repository is untouche
   These names select the same runtime package; they are not new skill aliases.
 
 `tests/install_smoke.py` exercises all six runtime installer names, installed
-CLI evaluation/receipt verification, unchanged legacy skill copying and overwrite refusal.
-App discovery of the future `$crosscheck` skill and replacement of the personal
-plugin must be checked after the existing proposal is integrated. No unsupported
-marketplace alias or automatic repository redirect is claimed.
+CLI evaluation/receipt verification, exact canonical and legacy skill copying,
+and overwrite refusal. Actual harness discovery/invocation is a separate check;
+no automatic replacement of the personal plugin or new skill alias is claimed.
 
 ## Unreleased Final Boss compatibility
 
@@ -66,39 +65,26 @@ still match. The schema lookup name `final-boss-receipt` remains an alias for
 new comments reconcile exact `final-boss-result`, `independent-qa-result` and
 `workboard-qa-result` packet/target markers before updating the owned comment.
 
-The unavailable, unreleased `final-boss` marketplace entry is replaced by the
-unavailable `crosscheck` entry. No released skill installation uses that entry;
+The unreleased `final-boss` marketplace entry is replaced by the available
+`crosscheck` candidate entry. No released skill installation uses the old entry;
 the existing `qa-agent@independent-qa-agent` entry remains available and unchanged.
+Candidate availability permits isolated installation, not a release or QA PASS.
 
-## Remaining skill source integration
+## Managed instruction source
 
-The existing Skill Workshop proposal has been identified by the integration owner
-and remains pending an explicit lifecycle decision. No duplicate proposal or
-direct generated/installed skill edit was made. That proposal remains the
-canonical source of reusable skill content; this rework changes runtime and packaging.
+The approved Skill Workshop package supplies
+`plugins/crosscheck/skills/crosscheck/SKILL.md` and its four references:
+`task-profiles.md`, `evidence-bundle.md`, `result-publication.md` and
+`runtime-integration.md`. These are transferred byte-for-byte from the applied
+managed source. Procedural corrections must go through the owning Workshop
+flow; do not directly edit the generated package.
 
-The integration owner must reuse that proposal to supply the canonical
-`plugins/crosscheck/skills/crosscheck/SKILL.md` and the managed
-`references/task-profiles.md`, `references/evidence-bundle.md`,
-`references/result-publication.md` and `references/runtime-integration.md` files.
-It must retain the explicit legacy invocation path and connect
-those instructions to manifest 1.0 and receipt 1.1. It must establish fresh
-session admission, profile selection, independent collection, exact target
-readback, current media/privacy review, verdict consumption and reviewed result
-publication. This is a remaining integration requirement, not a new skill proposal.
+The canonical plugin points to `./skills/`. The Claude installer accepts the
+explicit `crosscheck` name and rejects an incomplete package before writing.
+Both platforms retain the legacy invocation. See the
+[instruction discovery check](integrations.md#instruction-discovery) for the
+separate harness acceptance boundary.
 
-Workshop inspection does not apply or export release source. The current proposal
-targets the owner's workspace skill, so its `apply` operation would write there;
-it is not a repository-only export and is outside this implementation's authority.
-The owner must choose an authorized managed source materialization and transfer
-to the canonical repository location. Do not copy proposal front matter into a
-shipped skill or hand-author substitute instructions. No activation is needed to
-validate an authorized isolated package, but that package must exist first.
-
-After managed source integration, point the canonical plugin's `skills` field to
-`./skills/`, validate the plugin and skill package, and run actual isolated Codex
-and Claude discovery/invocation. The Claude installer already accepts the explicit
-`crosscheck` name and fails before writing when the managed package is missing.
-Enable marketplace installation only after the independent owner clears the
-release gates. No live installation, merge, tag, release, personal-source archive
-or removal is part of this candidate preparation.
+Fresh independent process QA and final owner verification remain release gates.
+No live installation, merge, tag, release, personal-source archive or removal is
+part of candidate preparation.

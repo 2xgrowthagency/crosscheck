@@ -4,6 +4,7 @@ import hashlib
 import importlib
 import json
 import subprocess
+import shutil
 import unittest
 
 from test_gate import GateFixture, MemoryTransport, ROOT
@@ -120,7 +121,11 @@ class BrandingTests(GateFixture, unittest.TestCase):
     def test_canonical_claude_install_refuses_missing_managed_source_without_writes(self):
         project = self.root / "isolated project"
         project.mkdir()
-        done = subprocess.run([ROOT / "scripts/install-claude-skill.sh", project, "crosscheck"],
+        # Reproduce an incomplete distribution without altering managed source.
+        package = self.root / "incomplete-package"
+        (package / "scripts").mkdir(parents=True)
+        shutil.copy2(ROOT / "scripts/install-claude-skill.sh", package / "scripts")
+        done = subprocess.run([package / "scripts/install-claude-skill.sh", project, "crosscheck"],
                               text=True, capture_output=True)
         self.assertEqual(2, done.returncode)
         self.assertIn("managed Crosscheck skill source", done.stderr)

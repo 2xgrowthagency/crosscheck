@@ -8,7 +8,7 @@ Approved Crosscheck naming:
   exact old report/receipt consumption and idempotent legacy comment reconciliation.
 - Recapture the synthetic Crosscheck demo and bind its current screenshot/trace bytes.
 - Prepare explicit Claude packaging with fail-closed missing-source behavior; managed
-  instruction integration and actual app discovery/invocation remain separate gates.
+  instructions and four references are now integrated byte-for-byte from the approved package.
 
 Source-review rework (same unreleased candidate):
 - Recheck live target, expiry and destination after lookup and delivery; return explicit stale publication state.
@@ -21,7 +21,8 @@ Source-review rework (same unreleased candidate):
 - Add eight profiles, current viewport proof, safe ordered trace/video requirements and privacy review binding.
 - Add exact-target receipt revalidation, structured blockers/rework and separate idempotent comment publication.
 - Add executable corpus, GitHub transport cases, installation smoke and Python CI matrix.
-- Keep canonical skill content pending the existing Skill Workshop integration and fresh independent process QA.
+- Wire canonical Codex/Claude instruction discovery while retaining legacy installation paths.
+- Fresh independent process QA and owner release verification remain required.
 
 ## 0.1.0 — organizational baseline
 
