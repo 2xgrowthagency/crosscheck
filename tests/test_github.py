@@ -2,8 +2,8 @@ import sys
 from pathlib import Path
 import unittest
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "plugins/final-boss/runtime"))
-from final_boss.github import GitHubTransport
+sys.path.insert(0, str(ROOT / "plugins/crosscheck/runtime"))
+from crosscheck.github import GitHubTransport
 
 
 class GitHubTests(unittest.TestCase):

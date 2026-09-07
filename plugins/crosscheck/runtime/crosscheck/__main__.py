@@ -9,7 +9,7 @@ from .gate import evaluate, validate_receipt
 from .report import report
 
 
-def main():
+def main(*, receipt_name="crosscheck-receipt.json"):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=["evaluate", "verify-receipt"])
     parser.add_argument("--manifest", type=Path, required=True)
@@ -44,7 +44,7 @@ def main():
         (output / "evidence-manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
         (output / "qa-report.md").write_bytes(report(manifest, receipt).encode("utf-8"))
         # Receipt is the completion marker; interrupted earlier writes never yield a gate.
-        (output / "final-boss-receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
+        (output / receipt_name).write_text(json.dumps(receipt, indent=2) + "\n")
         print(f"{receipt['verdict']}: {receipt['meaning']}")
         return {"PASS": 0, "FAIL": 1, "BLOCKED": 2}[receipt["verdict"]]
     except (ValidationError, ValueError, OSError):

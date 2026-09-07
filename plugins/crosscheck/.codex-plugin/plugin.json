@@ -1,28 +1,26 @@
 {
-  "name": "final-boss",
+  "name": "crosscheck",
   "version": "0.3.0-rc.1",
-  "description": "Final Boss evidence contracts and exact-target verification runtime. Canonical skill integration pending.",
+  "description": "Crosscheck evidence contracts and exact-target verification runtime. Canonical skill integration pending.",
   "author": {
     "name": "2x Growth Agency",
     "url": "https://github.com/2xgrowthagency"
   },
   "interface": {
-    "displayName": "Final Boss",
+    "displayName": "Crosscheck",
     "shortDescription": "Validate exact targets and durable evidence.",
     "longDescription": "Release-candidate runtime for PASS, FAIL and BLOCKED verification contracts. Skill Workshop integration is pending.",
     "developerName": "2x Growth Agency",
     "category": "Productivity",
     "capabilities": [],
-    "defaultPrompt": [
-      "Inspect the Final Boss runtime and release-candidate status."
-    ]
+    "defaultPrompt": ["Crosscheck"]
   },
-  "homepage": "https://github.com/2xgrowthagency/independent-qa-agent",
-  "repository": "https://github.com/2xgrowthagency/independent-qa-agent",
+  "homepage": "https://github.com/2xgrowthagency/crosscheck",
+  "repository": "https://github.com/2xgrowthagency/crosscheck",
   "license": "MIT",
   "keywords": [
     "qa",
     "verification",
-    "final-boss"
+    "crosscheck"
   ]
 }

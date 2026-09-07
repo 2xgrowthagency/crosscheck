@@ -1,14 +1,14 @@
-# Final Boss
+# Crosscheck
 
-Final Boss is the 2x-maintained, open-source verification gate for completed work.
+Crosscheck is the 2x-maintained, open-source verification gate for completed work.
 Its deterministic runtime binds evidence to an exact target and returns `PASS`,
 `FAIL`, or `BLOCKED`. Only PASS clears that target. A later change or expired
 result requires fresh verification. PASS grants no merge, closure, deployment,
 or account-change authority.
 
 **Release candidate: 0.3.0-rc.1.** The runtime, schemas, tests and migration
-installers are available for review. The canonical `$final-boss` skill remains
-pending integration through the existing Skill Workshop proposal. The Final Boss
+installers are available for review. The canonical `$crosscheck` skill remains
+pending integration through the existing Skill Workshop proposal. The Crosscheck
 marketplace entry is deliberately unavailable until that integration and fresh
 independent QA pass. The existing `qa-agent` plugin and `$independent-verification`
 skill remain unchanged and usable; they do not automatically enforce the new runtime.
@@ -18,14 +18,14 @@ skill remain unchanged and usable; they do not automatically enforce the new run
 Requires Python 3.11 or later. From this repository checkout:
 
 ```bash
-./scripts/install-runtime.sh .venv-final-boss
-.venv-final-boss/bin/final-boss --help
+./scripts/install-runtime.sh .venv-crosscheck
+.venv-crosscheck/bin/crosscheck --help
 ```
 
 The installer creates a new isolated environment and refuses to overwrite an
 existing one. This repository is the canonical source:
-`2xgrowthagency/independent-qa-agent`. No repository rename is required.
-The Python distribution is `final-boss-verifier`; no package registry release
+`2xgrowthagency/crosscheck`, renamed from `2xgrowthagency/independent-qa-agent`.
+The Python distribution is `crosscheck-verifier`; no package registry release
 has been published. Install the reviewed checkout, not an assumed registry package.
 
 ## Codex compatibility install
@@ -33,14 +33,14 @@ has been published. Install the reviewed checkout, not an assumed registry packa
 The existing published install path remains:
 
 ```bash
-codex plugin marketplace add 2xgrowthagency/independent-qa-agent
+codex plugin marketplace add 2xgrowthagency/crosscheck
 codex plugin add qa-agent@independent-qa-agent
 ```
 
 Start a fresh task to load `$independent-verification`. The marketplace retains
 its machine name `independent-qa-agent` to preserve installed references; its
-visible name is Final Boss. The staged future plugin name is
-`final-boss@independent-qa-agent`. Do not install it as a working skill until the
+visible name is Crosscheck. The staged future plugin name is
+`crosscheck@independent-qa-agent`. Do not install it as a working skill until the
 pending source integration is complete. Review checkout/runtime installation
 is separate from the main-branch Codex plugin installation above.
 
@@ -53,8 +53,17 @@ is separate from the main-branch Codex plugin installation above.
 This copies the unchanged skill into
 `.claude/skills/independent-verification/` and refuses to overwrite an existing
 installation. Runtime installation is independent and uses the first command
-above. The future Claude `$final-boss` entry is part of the same pending source
-integration; this candidate does not silently replace an installed skill.
+above. The explicit canonical path is:
+
+```bash
+./scripts/install-claude-skill.sh /path/to/isolated-project crosscheck
+```
+
+It currently returns **BLOCKED** without creating an installation because the
+managed source is not integrated. After the owner supplies the managed skill and
+its four references, it copies that package into `.claude/skills/crosscheck/`.
+Actual Codex/Claude instruction discovery and invocation are separate acceptance
+checks; Python imports, CLI success and a filesystem copy do not prove them.
 
 ## Runtime usage
 
@@ -64,7 +73,7 @@ commands, enforce an operating-system sandbox, or prove that an attestation is t
 The harness must provide execution separation and a read-only target.
 
 ```bash
-final-boss evaluate \
+crosscheck evaluate \
   --manifest /path/to/evidence/evidence-manifest.json \
   --evidence-root /path/to/evidence \
   --current-target /path/to/current-target.json \
@@ -73,13 +82,13 @@ final-boss evaluate \
 ```
 
 The output contains `qa-report.md`, `evidence-manifest.json`, and
-`final-boss-receipt.json`. Keep the original artifact bundle alongside the reports;
+`crosscheck-receipt.json`. Keep the original artifact bundle alongside the reports;
 manifest artifact paths resolve against `--evidence-root`. A missing receipt means
 an incomplete run. Exit codes are 0 for PASS, 1 for FAIL, and 2 for BLOCKED or an
 invalid/unavailable contract. A malformed contract cannot issue a valid receipt.
 
-Before consuming a stored result, run `final-boss verify-receipt` with the same
-inputs and `--receipt /path/to/final-boss-receipt.json`, omitting `--output`.
+Before consuming a stored result, run `crosscheck verify-receipt` with the same
+inputs and `--receipt /path/to/crosscheck-receipt.json`, omitting `--output`.
 It reads `qa-report.md` beside the receipt, or the exact file specified by
 `--report`. Missing or changed report bytes fail closed. Validated PASS, FAIL and
 BLOCKED receipts retain exit codes 0, 1 and 2, respectively; invalid or stale
@@ -88,9 +97,16 @@ criterion totals; pre-release 1.0 receipts cannot clear this revised gate.
 The current-target file must be freshly read by the trusted harness each time.
 Never use a comment, old target snapshot or `gate_cleared` boolean as approval.
 
+The unreleased `final-boss` CLI remains an alias and still writes
+`final-boss-receipt.json`; Python `final_boss` imports share the Crosscheck runtime.
+Stored Final Boss report/receipt pairs remain readable only when their exact
+original bytes, bound target and freshness still validate. New reports and
+comments use Crosscheck; exact legacy comment markers are reconciled in place.
+See the migration matrix for installed legacy skill identities, which remain unchanged.
+
 ## Supported targets and evidence
 
-The [profile policy](plugins/final-boss/runtime/final_boss/profiles.json) defines
+The [profile policy](plugins/crosscheck/runtime/crosscheck/profiles.json) defines
 inputs, checks, evidence, failure modes, stop conditions and PASS meaning for
 code/PR, UI, interactive workflows, documents, data, operations, decisions and
 QA processes. Multiple criteria can use different profiles in one bound target.

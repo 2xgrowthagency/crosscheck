@@ -1,4 +1,4 @@
-# Final Boss QA report
+# Crosscheck QA report
 
 RESULT: PASS
 
@@ -14,7 +14,7 @@ INDEPENDENCE: {"attestation": "SIMULATED session admission for contract tests on
 
 TARGET_FINGERPRINT: 895da7408044a3c67b2228409971c7626fb31152a0b3dd6ddce53f6ad29a1162
 
-EVIDENCE_SNAPSHOT: d8b618697eea3b73bc3d9322ab0cc65cf7f1551dc305ce86e68c3d5cd5b6cc42
+EVIDENCE_SNAPSHOT: 2caf022f86bc7188936fd6dd362a28d765077ee5db08ef1a90f1661ebb029f46
 
 CRITERIA_MATRIX: [{"description": "Two clicks reach Step 2 of 2 in order, with current layout proof.", "id": "demo", "profile": "interaction", "required": true, "sequence": true, "viewports": [{"height": 640, "width": 960}], "visual": true}]
 
@@ -30,9 +30,9 @@ ARTIFACTS: [{"captured_at": "2026-09-07T06:01:50.892836+00:00", "id": "screen", 
 
 SKIPPED_OR_INCONCLUSIVE: []
 
-RISK: ["Synthetic contract example; does not certify the Final Boss process or model interpretation."]
+RISK: ["Synthetic contract example; does not certify the Crosscheck process or model interpretation."]
 
-RISKS: ["Synthetic contract example; does not certify the Final Boss process or model interpretation."]
+RISKS: ["Synthetic contract example; does not certify the Crosscheck process or model interpretation."]
 
 INVALIDATION_TRIGGERS: Any target, base, environment, configuration, evidence, criteria or tool/session change; expiry.
 

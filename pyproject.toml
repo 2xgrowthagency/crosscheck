@@ -3,7 +3,7 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "final-boss-verifier"
+name = "crosscheck-verifier"
 version = "0.3.0rc1"
 description = "Exact-target, evidence-first verification contracts"
 requires-python = ">=3.11"
@@ -12,10 +12,11 @@ license = "MIT"
 authors = [{name = "2x Growth Agency"}]
 
 [project.scripts]
+crosscheck = "crosscheck.__main__:main"
 final-boss = "final_boss.__main__:main"
 
 [tool.setuptools.packages.find]
-where = ["plugins/final-boss/runtime"]
+where = ["plugins/crosscheck/runtime"]
 
 [tool.setuptools.package-data]
-final_boss = ["schemas/*.json", "profiles.json"]
+crosscheck = ["schemas/*.json", "profiles.json"]

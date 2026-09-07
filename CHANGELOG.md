@@ -2,13 +2,21 @@
 
 ## 0.3.0-rc.1 — candidate, not released
 
+Approved Crosscheck naming:
+- Rename the canonical runtime, distribution, CLI, plugin metadata and examples to Crosscheck.
+- Preserve installed legacy skill identities, the unreleased final-boss CLI/import aliases,
+  exact old report/receipt consumption and idempotent legacy comment reconciliation.
+- Recapture the synthetic Crosscheck demo and bind its current screenshot/trace bytes.
+- Prepare explicit Claude packaging with fail-closed missing-source behavior; managed
+  instruction integration and actual app discovery/invocation remain separate gates.
+
 Source-review rework (same unreleased candidate):
 - Recheck live target, expiry and destination after lookup and delivery; return explicit stale publication state.
 - Receipt schema 1.1 binds exact report bytes and criterion totals; add explicit report RISK while preserving RISKS.
 - Receipt consumption requires the persisted report and preserves PASS=0, FAIL=1, BLOCKED=2.
-- Manifest schema 1.0 and real screenshot/trace fixtures remain unchanged. Fresh source review and process QA are still required.
+- Keep manifest schema 1.0 and receipt schema 1.1; the synthetic screenshot/trace now show Crosscheck. Independent process QA is still required.
 
-- Stage Final Boss as the 2x-owned product; preserve existing marketplace and legacy skill identity.
+- Stage the 2x-owned product (original working name Final Boss); preserve existing marketplace and legacy skill identity.
 - Add versioned manifest/receipt schemas, deterministic evidence gate and offline CLI reports.
 - Add eight profiles, current viewport proof, safe ordered trace/video requirements and privacy review binding.
 - Add exact-target receipt revalidation, structured blockers/rework and separate idempotent comment publication.

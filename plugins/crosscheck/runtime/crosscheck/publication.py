@@ -25,8 +25,8 @@ class CommentTransport(Protocol):
 
 def summary(manifest, receipt, *, purpose, checked, next_action, human_action):
     """Build a candidate; apply active communication guidance before approval."""
-    marker = f"<!-- final-boss-result:{manifest['packet_id']}:{receipt['target_sha256']} -->"
-    return (f"{marker}\nFinal Boss: {receipt['verdict']} — {receipt['meaning']}\n\n"
+    marker = f"<!-- crosscheck-result:{manifest['packet_id']}:{receipt['target_sha256']} -->"
+    return (f"{marker}\nCrosscheck: {receipt['verdict']} — {receipt['meaning']}\n\n"
             f"Purpose: {purpose}\n\nChecked: {checked}\n\n"
             f"Next: {next_action}\n\nHuman action: {human_action}\n\n"
             "Full report retained locally. This result does not authorize product changes.\n")
@@ -40,7 +40,7 @@ def publish(manifest, receipt, evidence_root, transport, body, approval, *, repo
     Only body is sent; artifacts, raw reports, exception text and paths stay local.
     """
     result = copy.deepcopy(receipt)
-    validate(result, "final-boss-receipt")
+    validate(result, "crosscheck-receipt")
     validate_report(manifest, result, report_bytes)
     statuses = {p["destination_id"]: p for p in result["publication"]}
 
@@ -76,14 +76,16 @@ def publish(manifest, receipt, evidence_root, transport, body, approval, *, repo
     if changed(fresh):
         return invalidate(fresh)
     validate_receipt(result, manifest, evidence_root, current, report_bytes=report_bytes, now=now)
-    marker = f"<!-- final-boss-result:{manifest['packet_id']}:{fingerprint(manifest['target'])} -->"
-    if not body.startswith(marker + "\n") or f"Final Boss: {result['verdict']}" not in body:
+    marker = f"<!-- crosscheck-result:{manifest['packet_id']}:{fingerprint(manifest['target'])} -->"
+    old_marker = marker.replace("crosscheck-result:", "final-boss-result:", 1)
+    if not any(body.startswith(prefix + "\n") and f"{brand}: {result['verdict']}" in body
+               for prefix, brand in ((marker, "Crosscheck"), (old_marker, "Final Boss"))):
         raise ValueError("summary verdict/binding differs from receipt")
     if approval.get("body_sha256") != hashlib.sha256(body.encode()).hexdigest() or approval.get("reviewed") is not True:
         raise ValueError("the exact comment body needs explicit privacy and communication review")
     approved = approval.get("destinations", [])
     legacy = [f"<!-- {prefix}:{manifest['packet_id']}:{result['target_sha256']} -->"
-              for prefix in ("independent-qa-result", "workboard-qa-result")]
+              for prefix in ("final-boss-result", "independent-qa-result", "workboard-qa-result")]
     for destination in manifest["destinations"]:
         state = statuses[destination["id"]]
         if not destination["authorized"]:

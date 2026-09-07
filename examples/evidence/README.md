@@ -8,7 +8,7 @@ cookies, customer material or private pages were used.
 
 The manifest and receipt use simulated producer/verifier admission to demonstrate
 the wire contract. The implementation worker captured the media: this is not
-independent QA of Final Boss. The session clock is fixed for deterministic replay;
+independent QA of Crosscheck. The session clock is fixed for deterministic replay;
 normal current-time validation will expire this receipt. Tests use its declared
 historical evaluation time only for fixture replay, never for a real gate.
 

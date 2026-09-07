@@ -20,6 +20,8 @@ def fingerprint(value):
 
 
 def validate(value, name):
+    if name == "final-boss-receipt":  # Unreleased schema lookup alias.
+        name = "crosscheck-receipt"
     schema = json.loads((ROOT / "schemas" / f"{name}.schema.json").read_text())
     Draft202012Validator(schema, format_checker=FormatChecker()).validate(value)
 
@@ -170,13 +172,13 @@ def evaluate(manifest, evidence_root, current_target, *, now=None):
                    publication=[dict(destination_id=d["id"], status="pending" if d["authorized"] else "not-authorized",
                                      comment_locator=None, reason=None) for d in manifest["destinations"]])
     receipt = bind_report(manifest, receipt)
-    validate(receipt, "final-boss-receipt")
+    validate(receipt, "crosscheck-receipt")
     return receipt
 
 
 def validate_receipt(receipt, manifest, evidence_root, current_target, *, report_bytes, now=None):
     """A stored PASS is never consumed by trusting its boolean alone."""
-    validate(receipt, "final-boss-receipt")
+    validate(receipt, "crosscheck-receipt")
     validate_report(manifest, receipt, report_bytes)
     expected = evaluate(manifest, evidence_root, current_target, now=now)
     for key in ("packet_id", "target_sha256", "manifest_sha256", "verifier_id", "verdict", "gate_cleared", "meaning", "problems", "expires_at", "criterion_totals"):

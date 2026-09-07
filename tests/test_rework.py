@@ -9,10 +9,10 @@ import unittest
 from datetime import timedelta
 
 from test_gate import GateFixture, MemoryTransport, ROOT
-from final_boss.gate import utc_now
-from final_boss.publication import publish, summary
-from final_boss.report import report, bind_report
-from final_boss.gate import validate_receipt, instant
+from crosscheck.gate import utc_now
+from crosscheck.publication import publish, summary
+from crosscheck.report import report, bind_report
+from crosscheck.gate import validate_receipt, instant
 
 
 class ReworkTests(GateFixture, unittest.TestCase):
@@ -241,25 +241,25 @@ class ReworkTests(GateFixture, unittest.TestCase):
         output = self.root / status
         common = ["--manifest", str(manifest), "--evidence-root", str(self.evidence),
                   "--current-target", str(target), "--target-root", str(self.root / "product")]
-        self.env = {**os.environ, "PYTHONPATH": str(ROOT / "plugins/final-boss/runtime")}
+        self.env = {**os.environ, "PYTHONPATH": str(ROOT / "plugins/crosscheck/runtime")}
         evaluated = self.cli("evaluate", *common, "--output", str(output))
         return evaluated, output, common
 
     def cli(self, *args):
-        return subprocess.run([sys.executable, "-m", "final_boss", *args],
+        return subprocess.run([sys.executable, "-m", "crosscheck", *args],
                               env=self.env, text=True, capture_output=True)
 
     def test_modified_report_cannot_clear_receipt(self):
         evaluated, output, common = self.cli_inputs("pass")
         self.assertEqual(0, evaluated.returncode, evaluated.stderr)
         (output / "qa-report.md").write_text("RESULT: PASS\nSCOPE: different untested work\n")
-        verified = self.cli("verify-receipt", *common, "--receipt", str(output / "final-boss-receipt.json"))
+        verified = self.cli("verify-receipt", *common, "--receipt", str(output / "crosscheck-receipt.json"))
         self.assertEqual(2, verified.returncode)
 
     def test_valid_blocked_receipt_keeps_exit_two(self):
         evaluated, output, common = self.cli_inputs("blocked")
         self.assertEqual(2, evaluated.returncode, evaluated.stderr)
-        verified = self.cli("verify-receipt", *common, "--receipt", str(output / "final-boss-receipt.json"))
+        verified = self.cli("verify-receipt", *common, "--receipt", str(output / "crosscheck-receipt.json"))
         self.assertEqual(2, verified.returncode)
         self.assertTrue(verified.stdout.startswith("BLOCKED:"))
 
@@ -268,7 +268,7 @@ class ReworkTests(GateFixture, unittest.TestCase):
             with self.subTest(verdict=verdict):
                 evaluated, output, common = self.cli_inputs(verdict)
                 self.assertEqual(code, evaluated.returncode, evaluated.stderr)
-                verified = self.cli("verify-receipt", *common, "--receipt", str(output / "final-boss-receipt.json"))
+                verified = self.cli("verify-receipt", *common, "--receipt", str(output / "crosscheck-receipt.json"))
                 self.assertEqual(code, verified.returncode, verified.stderr)
                 self.assertTrue(verified.stdout.startswith(verdict.upper() + ":"))
 
@@ -277,19 +277,19 @@ class ReworkTests(GateFixture, unittest.TestCase):
         _, other, _ = self.cli_inputs("fail")
         for path in (self.root / "missing.md", other / "qa-report.md"):
             with self.subTest(path=path.name):
-                verified = self.cli("verify-receipt", *common, "--receipt", str(output / "final-boss-receipt.json"),
+                verified = self.cli("verify-receipt", *common, "--receipt", str(output / "crosscheck-receipt.json"),
                                     "--report", str(path))
                 self.assertEqual(2, verified.returncode)
                 self.assertTrue(verified.stderr.startswith("BLOCKED:"))
         (output / "qa-report.md").unlink()
-        verified = self.cli("verify-receipt", *common, "--receipt", str(output / "final-boss-receipt.json"))
+        verified = self.cli("verify-receipt", *common, "--receipt", str(output / "crosscheck-receipt.json"))
         self.assertEqual(2, verified.returncode)
 
     def test_cli_stale_target_is_blocked(self):
         _, output, common = self.cli_inputs("pass")
         self.target["revision"] = "changed-after-evaluation"
         (self.root / "target.json").write_text(json.dumps(self.target))
-        verified = self.cli("verify-receipt", *common, "--receipt", str(output / "final-boss-receipt.json"))
+        verified = self.cli("verify-receipt", *common, "--receipt", str(output / "crosscheck-receipt.json"))
         self.assertEqual(2, verified.returncode)
         self.assertTrue(verified.stderr.startswith("BLOCKED:"))
 

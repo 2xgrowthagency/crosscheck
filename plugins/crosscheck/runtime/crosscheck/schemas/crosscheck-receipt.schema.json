@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://2xgrowthagency.github.io/independent-qa-agent/schemas/final-boss-receipt-1.1.json",
+  "$id": "https://2xgrowthagency.github.io/crosscheck/schemas/crosscheck-receipt-1.1.json",
   "type": "object",
   "properties": {
     "schema_version": {

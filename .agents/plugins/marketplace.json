@@ -1,7 +1,7 @@
 {
   "name": "independent-qa-agent",
   "interface": {
-    "displayName": "Final Boss"
+    "displayName": "Crosscheck"
   },
   "plugins": [
     {
@@ -17,10 +17,10 @@
       "category": "Productivity"
     },
     {
-      "name": "final-boss",
+      "name": "crosscheck",
       "source": {
         "source": "local",
-        "path": "./plugins/final-boss"
+        "path": "./plugins/crosscheck"
       },
       "policy": {
         "installation": "NOT_AVAILABLE",

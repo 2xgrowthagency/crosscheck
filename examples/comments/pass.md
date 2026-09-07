@@ -1,12 +1,12 @@
-<!-- final-boss-result:synthetic-demo-001:f1495fe485c979eeb2bd85961d6af410a1ca7255e2963227e1384931783b7386 -->
-Final Boss: PASS — Review of this tested workflow; no merge, closure, deployment or mutation authority.
+<!-- crosscheck-result:synthetic-demo-001:895da7408044a3c67b2228409971c7626fb31152a0b3dd6ddce53f6ad29a1162 -->
+Crosscheck: PASS — Review of this tested workflow; no merge, closure, deployment or mutation authority.
 
-Purpose: Confirm that two clicks reach the final demo state.
+Purpose: Verify the synthetic two-step demo
 
-Checked: The two transitions and final screen at the agreed viewport.
+Checked: Two clicks and the resulting screen
 
-Next: Reviewer inspects the bound demo result.
+Next: Owner reviews the result
 
-Human action: Nothing needed from you; the named owner has the next action.
+Human action: No action for this synthetic example
 
 Full report retained locally. This result does not authorize product changes.

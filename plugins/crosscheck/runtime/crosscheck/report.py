@@ -21,7 +21,7 @@ def report(manifest, receipt):
         "PUBLICATION": receipt["publication"],
         "RECOMMENDATION": receipt["meaning"],
     }
-    return "# Final Boss QA report\n\n" + "\n\n".join(
+    return "# Crosscheck QA report\n\n" + "\n\n".join(
         f"{key}: {value if isinstance(value, str) else json.dumps(value, sort_keys=True)}" for key, value in fields.items()) + "\n"
 
 
@@ -39,6 +39,10 @@ def bind_report(manifest, receipt):
 def validate_report(manifest, receipt, report_bytes):
     if not isinstance(report_bytes, bytes):
         raise ValueError("persisted report bytes are required")
+    current = report(manifest, receipt).encode("utf-8")
+    # Unreleased Final Boss receipts retain their exact original heading/hash.
+    # Accept only that known render variant, never normalize the supplied bytes.
+    legacy = current.replace(b"# Crosscheck QA report\n", b"# Final Boss QA report\n", 1)
     if (hashlib.sha256(report_bytes).hexdigest() != receipt["report_sha256"]
-            or report_bytes != report(manifest, receipt).encode("utf-8")):
+            or report_bytes not in (current, legacy)):
         raise ValueError("report does not match the completion receipt")

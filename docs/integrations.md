@@ -16,7 +16,7 @@ not rerun all unchanged tests for ceremony or treat a producer summary as proof.
 The harness creates a manifest and a fresh target snapshot, calls `evaluate`,
 and retains the report/manifest/receipt plus artifact bytes. The merge/closure
 owner calls `validate_receipt` with the persisted report bytes against a newly read target immediately before
-using PASS. Final Boss never merges or closes anything itself. A failed or blocked
+using PASS. Crosscheck never merges or closes anything itself. A failed or blocked
 No Mistakes result cannot be represented as successful handoff evidence.
 
 ## Optional 2x / Workboard adapter
@@ -57,8 +57,8 @@ is unavailable or cannot deduplicate notices, its publication is failed and the
 root owner reconciles the exact destination. Never substitute another thread.
 
 ```python
-from final_boss.publication import publish
-from final_boss.report import report
+from crosscheck.publication import publish
+from crosscheck.report import report
 
 # These inputs come from the trusted verifier/owner, after applying active
 # communication guidance and reviewing this exact body and destination list.

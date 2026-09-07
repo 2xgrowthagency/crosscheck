@@ -1,6 +1,6 @@
 # Runtime contracts: manifest 1.0, receipt 1.1
 
-The JSON schemas shipped inside `final_boss/schemas/` are the authoritative wire
+The JSON schemas shipped inside `crosscheck/schemas/` are the authoritative wire
 shapes. Unknown fields, unsupported versions, malformed identifiers/timestamps,
 missing fields, duplicate IDs and dangling check references are rejected.
 Schema validation establishes shape. Runtime evaluation additionally establishes
@@ -62,7 +62,7 @@ it in a fresh manifest/session. No automatic detector can certify privacy.
 
 ## Gate receipt and report
 
-`final-boss-receipt.json` binds packet, exact target, full manifest, verifier,
+`crosscheck-receipt.json` binds packet, exact target, full manifest, verifier,
 evaluation/expiry, verdict, practical meaning, structured problems and per-destination
 publication status. Problems identify criterion, observation, evidence IDs, severity,
 impact, owner, disposition and bounded action. Only PASS has `gate_cleared: true`.

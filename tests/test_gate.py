@@ -11,10 +11,10 @@ import unittest
 from datetime import timedelta
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "plugins/final-boss/runtime"))
-from final_boss.gate import evaluate, validate_receipt, validate, instant, utc_now, fingerprint, PROFILES
-from final_boss.publication import publish, summary
-from final_boss.report import report
+sys.path.insert(0, str(ROOT / "plugins/crosscheck/runtime"))
+from crosscheck.gate import evaluate, validate_receipt, validate, instant, utc_now, fingerprint, PROFILES
+from crosscheck.publication import publish, summary
+from crosscheck.report import report
 from jsonschema.exceptions import ValidationError
 
 
@@ -127,7 +127,7 @@ class GateTests(GateFixture, unittest.TestCase):
 
     def test_forged_gate_boolean_rejected(self):
         receipt = self.evaluate(); receipt["verdict"] = "FAIL"
-        with self.assertRaises(ValidationError): validate(receipt, "final-boss-receipt")
+        with self.assertRaises(ValidationError): validate(receipt, "crosscheck-receipt")
 
     def test_local_only_media_can_prove_without_upload(self):
         for a in self.m["artifacts"]:
@@ -142,18 +142,18 @@ class GateTests(GateFixture, unittest.TestCase):
         tp = self.evidence / "current-target.json"; tp.write_text(json.dumps(self.target))
         target_root = self.root / "product"; target_root.mkdir(); (target_root / "sentinel").write_text("untouched")
         output = self.root / "reports"
-        args = [sys.executable, "-m", "final_boss", "evaluate", "--manifest", str(mp), "--evidence-root", str(self.evidence),
+        args = [sys.executable, "-m", "crosscheck", "evaluate", "--manifest", str(mp), "--evidence-root", str(self.evidence),
                 "--current-target", str(tp), "--target-root", str(target_root), "--output", str(output)]
-        env = {**os.environ, "PYTHONPATH": str(ROOT / "plugins/final-boss/runtime")}
+        env = {**os.environ, "PYTHONPATH": str(ROOT / "plugins/crosscheck/runtime")}
         done = subprocess.run(args, env=env, text=True, capture_output=True)
         self.assertEqual(0, done.returncode, done.stderr)
-        self.assertEqual({"qa-report.md", "evidence-manifest.json", "final-boss-receipt.json"}, {p.name for p in output.iterdir()})
+        self.assertEqual({"qa-report.md", "evidence-manifest.json", "crosscheck-receipt.json"}, {p.name for p in output.iterdir()})
         self.assertEqual("untouched", (target_root / "sentinel").read_text())
         self.assertEqual(2, subprocess.run(args, env=env, capture_output=True).returncode)
         args[-1] = str(target_root / "reports")
         self.assertEqual(2, subprocess.run(args, env=env, capture_output=True).returncode)
         self.assertFalse((target_root / "reports").exists())
-        receipt = json.loads((output / "final-boss-receipt.json").read_text())
+        receipt = json.loads((output / "crosscheck-receipt.json").read_text())
         self.assertTrue(validate_receipt(receipt, self.m, self.evidence, self.target, report_bytes=(output / "qa-report.md").read_bytes()))
 
     def test_report_legacy_field_contract(self):

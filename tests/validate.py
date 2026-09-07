@@ -8,21 +8,21 @@ import yaml
 from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "plugins/final-boss/runtime"))
-from final_boss.gate import evaluate, instant, validate, validate_receipt
+sys.path.insert(0, str(ROOT / "plugins/crosscheck/runtime"))
+from crosscheck.gate import evaluate, instant, validate, validate_receipt
 
 
 def main():
     marketplace = json.loads((ROOT / ".agents/plugins/marketplace.json").read_text())
     assert marketplace["name"] == "independent-qa-agent", "preserve installed marketplace identity"
-    assert marketplace["interface"]["displayName"] == "Final Boss"
-    assert {p["name"] for p in marketplace["plugins"]} == {"qa-agent", "final-boss"}
+    assert marketplace["interface"]["displayName"] == "Crosscheck"
+    assert {p["name"] for p in marketplace["plugins"]} == {"qa-agent", "crosscheck"}
     for entry in marketplace["plugins"]:
         plugin = ROOT / entry["source"]["path"]
         metadata = json.loads((plugin / ".codex-plugin/plugin.json").read_text())
         assert metadata["name"] == plugin.name == entry["name"]
         assert metadata["author"]["name"] == "2x Growth Agency"
-        assert entry["policy"]["installation"] == ("NOT_AVAILABLE" if entry["name"] == "final-boss" else "AVAILABLE")
+        assert entry["policy"]["installation"] == ("NOT_AVAILABLE" if entry["name"] == "crosscheck" else "AVAILABLE")
         assert entry["policy"]["authentication"] in {"ON_INSTALL", "ON_USE"}
         for field in ("composerIcon", "logo", "logoDark"):
             if field in metadata["interface"]:
@@ -34,15 +34,15 @@ def main():
                 parsed = yaml.safe_load(frontmatter)
                 assert parsed["name"] == skill.parent.name
                 assert isinstance(parsed["description"], str) and parsed["description"]
-    for path in (ROOT / "plugins/final-boss/runtime/final_boss/schemas").glob("*.json"):
+    for path in (ROOT / "plugins/crosscheck/runtime/crosscheck/schemas").glob("*.json"):
         Draft202012Validator.check_schema(json.loads(path.read_text()))
     bundle = ROOT / "examples/evidence"
     manifest = json.loads((bundle / "evidence-manifest.json").read_text())
-    receipt = json.loads((bundle / "final-boss-receipt.json").read_text())
+    receipt = json.loads((bundle / "crosscheck-receipt.json").read_text())
     validate_receipt(receipt, manifest, bundle, manifest["target"], report_bytes=(bundle / "qa-report.md").read_bytes(), now=instant(receipt["evaluated_at"]))
     for path in (ROOT / "examples/comments").glob("*.json"):
         receipt = json.loads(path.read_text())
-        validate(receipt, "final-boss-receipt")
+        validate(receipt, "crosscheck-receipt")
         report_bytes = path.with_name(path.stem + "-report.md").read_bytes()
         assert hashlib.sha256(report_bytes).hexdigest() == receipt["report_sha256"]
     workflow = yaml.safe_load((ROOT / ".github/workflows/validate.yml").read_text())
