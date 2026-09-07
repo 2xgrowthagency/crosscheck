@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from jsonschema import Draft202012Validator, FormatChecker
+from .report import bind_report, validate_report
 
 ROOT = Path(__file__).resolve().parent
 PROFILES = json.loads((ROOT / "profiles.json").read_text())
@@ -116,10 +117,10 @@ def evaluate(manifest, evidence_root, current_target, *, now=None):
         if artifact["origin"] == "verifier" and artifact["session_id"] == session["verifier_id"]:
             valid.add(aid)
 
+    totals = {lane: dict(total=0, passed=0, failed=0, blocked=0) for lane in ("required", "advisory")}
     for cid, criterion in criteria.items():
         checks = [c for c in manifest["checks"] if c["criterion_id"] == cid]
-        if not criterion["required"]:
-            continue
+        failure_start, gap_start = len(failures), len(gaps)
         if not checks:
             gaps.append(problem("missing-check", cid, action=f"Run an independent check for {cid}."))
         for check in checks:
@@ -149,27 +150,36 @@ def evaluate(manifest, evidence_root, current_target, *, now=None):
                     and a["media"]["url"] == manifest["target"]["locator"] for a in usable):
                 gaps.append(problem("missing-interaction-media", cid,
                                     action=f"Provide a safe ordered trace or reviewed recording for {cid}; do not record private material."))
+        lane = totals["required" if criterion["required"] else "advisory"]
+        status = "blocked" if problems else "failed" if len(failures) > failure_start else "blocked" if len(gaps) > gap_start else "passed"
+        lane["total"] += 1
+        lane[status] += 1
+        if not criterion["required"]:
+            del failures[failure_start:]
+            del gaps[gap_start:]
     # Invalid target/session/integrity defeats even conclusive observations.
     verdict = "BLOCKED" if problems else "FAIL" if failures else "BLOCKED" if gaps else "PASS"
     all_problems = problems + failures + gaps
     meaning = {"PASS": PROFILES[manifest["target"]["kind"]]["pass_permits"] + "; no merge, closure, deployment or mutation authority.",
                "FAIL": "A required criterion failed. The named producer owns bounded rework, followed by fresh verification.",
                "BLOCKED": "The target is not cleared. The named owner must perform the exact unblock action before fresh verification."}[verdict]
-    receipt = dict(schema_version="1.0", packet_id=manifest["packet_id"], target_sha256=target_hash,
+    receipt = dict(schema_version="1.1", packet_id=manifest["packet_id"], target_sha256=target_hash,
                    manifest_sha256=fingerprint(manifest), verifier_id=session["verifier_id"],
                    evaluated_at=now.isoformat(), expires_at=expiry.isoformat(), verdict=verdict,
-                   gate_cleared=verdict == "PASS", meaning=meaning, problems=all_problems,
+                   gate_cleared=verdict == "PASS", meaning=meaning, problems=all_problems, criterion_totals=totals,
                    publication=[dict(destination_id=d["id"], status="pending" if d["authorized"] else "not-authorized",
                                      comment_locator=None, reason=None) for d in manifest["destinations"]])
+    receipt = bind_report(manifest, receipt)
     validate(receipt, "final-boss-receipt")
     return receipt
 
 
-def validate_receipt(receipt, manifest, evidence_root, current_target, *, now=None):
+def validate_receipt(receipt, manifest, evidence_root, current_target, *, report_bytes, now=None):
     """A stored PASS is never consumed by trusting its boolean alone."""
     validate(receipt, "final-boss-receipt")
+    validate_report(manifest, receipt, report_bytes)
     expected = evaluate(manifest, evidence_root, current_target, now=now)
-    for key in ("packet_id", "target_sha256", "manifest_sha256", "verifier_id", "verdict", "gate_cleared", "meaning", "problems", "expires_at"):
+    for key in ("packet_id", "target_sha256", "manifest_sha256", "verifier_id", "verdict", "gate_cleared", "meaning", "problems", "expires_at", "criterion_totals"):
         if receipt[key] != expected[key]:
             raise ValueError(f"receipt no longer valid: {key}")
     if not instant(manifest["session"]["finished_at"]) <= instant(receipt["evaluated_at"]) <= (now or utc_now()):

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "packet_id": "synthetic-demo-001",
   "target_sha256": "f1495fe485c979eeb2bd85961d6af410a1ca7255e2963227e1384931783b7386",
   "manifest_sha256": "a6fe49b32f8d6b291ce190539799ed4543f3da96d1b581c971faf3c96bb7484d",
@@ -10,6 +10,20 @@
   "gate_cleared": true,
   "meaning": "Review of this tested workflow; no merge, closure, deployment or mutation authority.",
   "problems": [],
+  "criterion_totals": {
+    "required": {
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "blocked": 0
+    },
+    "advisory": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "blocked": 0
+    }
+  },
   "publication": [
     {
       "destination_id": "pr",
@@ -29,5 +43,6 @@
       "comment_locator": null,
       "reason": null
     }
-  ]
+  ],
+  "report_sha256": "e141b193096aae1080869b6bdb5f8113f101d3f3a067ecd5240cc885067b2d9f"
 }

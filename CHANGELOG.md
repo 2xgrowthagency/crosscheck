@@ -2,6 +2,12 @@
 
 ## 0.3.0-rc.1 — candidate, not released
 
+Source-review rework (same unreleased candidate):
+- Recheck live target, expiry and destination after lookup and delivery; return explicit stale publication state.
+- Receipt schema 1.1 binds exact report bytes and criterion totals; add explicit report RISK while preserving RISKS.
+- Receipt consumption requires the persisted report and preserves PASS=0, FAIL=1, BLOCKED=2.
+- Manifest schema 1.0 and real screenshot/trace fixtures remain unchanged. Fresh source review and process QA are still required.
+
 - Stage Final Boss as the 2x-owned product; preserve existing marketplace and legacy skill identity.
 - Add versioned manifest/receipt schemas, deterministic evidence gate and offline CLI reports.
 - Add eight profiles, current viewport proof, safe ordered trace/video requirements and privacy review binding.

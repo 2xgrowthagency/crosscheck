@@ -49,15 +49,15 @@ marketplace alias or automatic repository redirect is claimed.
 
 ## Remaining skill source integration
 
-This implementation lane has no callable Skill Workshop interface and could not
-resolve the existing proposal’s ID through its available task/source metadata.
-No duplicate proposal or direct generated/installed skill edit was made.
-The existing proposal remains the canonical source of reusable skill content.
+The existing Skill Workshop proposal has been identified by the integration owner
+and remains pending an explicit lifecycle decision. No duplicate proposal or
+direct generated/installed skill edit was made. That proposal remains the
+canonical source of reusable skill content; this rework only changes runtime contracts.
 
 The integration owner must reuse that proposal to supply the canonical
 `plugins/final-boss/skills/final-boss/SKILL.md`, companion agent metadata and mode/
 publication references, retain an explicit legacy invocation path, and connect
-those instructions to the version 1.0 runtime contract. It must establish fresh
+those instructions to manifest 1.0 and receipt 1.1. It must establish fresh
 session admission, profile selection, independent collection, exact target
 readback, current media/privacy review, verdict consumption and reviewed result
 publication. This is a remaining integration requirement, not a new skill proposal.

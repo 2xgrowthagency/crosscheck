@@ -80,6 +80,11 @@ invalid/unavailable contract. A malformed contract cannot issue a valid receipt.
 
 Before consuming a stored result, run `final-boss verify-receipt` with the same
 inputs and `--receipt /path/to/final-boss-receipt.json`, omitting `--output`.
+It reads `qa-report.md` beside the receipt, or the exact file specified by
+`--report`. Missing or changed report bytes fail closed. Validated PASS, FAIL and
+BLOCKED receipts retain exit codes 0, 1 and 2, respectively; invalid or stale
+inputs return BLOCKED with exit 2. Receipt schema 1.1 requires report hashes and
+criterion totals; pre-release 1.0 receipts cannot clear this revised gate.
 The current-target file must be freshly read by the trusted harness each time.
 Never use a comment, old target snapshot or `gate_cleared` boolean as approval.
 

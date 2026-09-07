@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "packet_id": "synthetic-demo-001",
   "target_sha256": "f1495fe485c979eeb2bd85961d6af410a1ca7255e2963227e1384931783b7386",
   "manifest_sha256": "de7afb53c0f194755bb49a603bff26166cb5fa64fe78313c36aee89beafd827d",
@@ -22,6 +22,20 @@
       "action": "Verification owner: provide a synthetic interaction surface or safe trace."
     }
   ],
+  "criterion_totals": {
+    "required": {
+      "total": 1,
+      "passed": 0,
+      "failed": 0,
+      "blocked": 1
+    },
+    "advisory": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "blocked": 0
+    }
+  },
   "publication": [
     {
       "destination_id": "pr",
@@ -41,5 +55,6 @@
       "comment_locator": null,
       "reason": null
     }
-  ]
+  ],
+  "report_sha256": "c74dd38b251f606d48e1fda963e63ce40a97b9793776e34a966653f161ad03cf"
 }

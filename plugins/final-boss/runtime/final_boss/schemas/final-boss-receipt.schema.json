@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://2xgrowthagency.github.io/independent-qa-agent/schemas/final-boss-receipt-1.0.json",
+  "$id": "https://2xgrowthagency.github.io/independent-qa-agent/schemas/final-boss-receipt-1.1.json",
   "type": "object",
   "properties": {
     "schema_version": {
-      "const": "1.0"
+      "const": "1.1"
     },
     "packet_id": {
       "type": "string",
@@ -17,6 +17,19 @@
     "manifest_sha256": {
       "type": "string",
       "pattern": "^[a-f0-9]{64}$"
+    },
+    "report_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "criterion_totals": {
+      "type": "object",
+      "properties": {
+        "required": {"$ref": "#/$defs/totals"},
+        "advisory": {"$ref": "#/$defs/totals"}
+      },
+      "required": ["required", "advisory"],
+      "additionalProperties": false
     },
     "verifier_id": {
       "type": "string",
@@ -122,7 +135,8 @@
               "pending",
               "not-authorized",
               "published",
-              "failed"
+              "failed",
+              "stale"
             ]
           },
           "comment_locator": {
@@ -154,6 +168,8 @@
     "packet_id",
     "target_sha256",
     "manifest_sha256",
+    "report_sha256",
+    "criterion_totals",
     "verifier_id",
     "evaluated_at",
     "expires_at",
@@ -164,6 +180,19 @@
     "publication"
   ],
   "additionalProperties": false,
+  "$defs": {
+    "totals": {
+      "type": "object",
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "passed": {"type": "integer", "minimum": 0},
+        "failed": {"type": "integer", "minimum": 0},
+        "blocked": {"type": "integer", "minimum": 0}
+      },
+      "required": ["total", "passed", "failed", "blocked"],
+      "additionalProperties": false
+    }
+  },
   "allOf": [
     {
       "if": {

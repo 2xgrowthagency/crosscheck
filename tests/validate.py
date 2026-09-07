@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate consumed metadata and schema/example contracts, not prompt wording."""
 import json
+import hashlib
 import sys
 from pathlib import Path
 import yaml
@@ -38,9 +39,12 @@ def main():
     bundle = ROOT / "examples/evidence"
     manifest = json.loads((bundle / "evidence-manifest.json").read_text())
     receipt = json.loads((bundle / "final-boss-receipt.json").read_text())
-    validate_receipt(receipt, manifest, bundle, manifest["target"], now=instant(receipt["evaluated_at"]))
+    validate_receipt(receipt, manifest, bundle, manifest["target"], report_bytes=(bundle / "qa-report.md").read_bytes(), now=instant(receipt["evaluated_at"]))
     for path in (ROOT / "examples/comments").glob("*.json"):
-        validate(json.loads(path.read_text()), "final-boss-receipt")
+        receipt = json.loads(path.read_text())
+        validate(receipt, "final-boss-receipt")
+        report_bytes = path.with_name(path.stem + "-report.md").read_bytes()
+        assert hashlib.sha256(report_bytes).hexdigest() == receipt["report_sha256"]
     workflow = yaml.safe_load((ROOT / ".github/workflows/validate.yml").read_text())
     events = workflow.get("on", workflow.get(True))  # YAML 1.1 treats on as a boolean.
     assert "pull_request" in events and "main" in events["push"]["branches"]

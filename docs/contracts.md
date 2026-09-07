@@ -1,4 +1,4 @@
-# Runtime contracts, version 1.0
+# Runtime contracts: manifest 1.0, receipt 1.1
 
 The JSON schemas shipped inside `final_boss/schemas/` are the authoritative wire
 shapes. Unknown fields, unsupported versions, malformed identifiers/timestamps,
@@ -67,13 +67,28 @@ evaluation/expiry, verdict, practical meaning, structured problems and per-desti
 publication status. Problems identify criterion, observation, evidence IDs, severity,
 impact, owner, disposition and bounded action. Only PASS has `gate_cleared: true`.
 
+Receipt 1.1 adds required `report_sha256` and `criterion_totals`. This is an
+intentional pre-release contract change: 1.0 receipts must be regenerated from
+their original evidence at a valid historical fixture time, or replaced by a
+fresh real verification. Old receipts cannot clear the new gate. Manifest and
+target schema versions remain unchanged.
+
+`criterion_totals` separates required and advisory criteria, each with `total`,
+`passed`, `failed` and `blocked` counts. Each criterion is counted once, regardless
+of how many checks it has. Missing or inconclusive checks count as blocked;
+independent defects take precedence over missing proof for that criterion.
+Global target/session/evidence invalidation marks every criterion blocked.
+Advisory outcomes never change the required verdict. Consumption recomputes all
+counts from evidence; a schema-valid but fabricated total cannot pass.
+
 An invalid target/session or evidence-integrity/privacy condition takes precedence
 as BLOCKED. Otherwise an independently observed required defect gives FAIL even if
 another check is incomplete. Missing proof gives BLOCKED. Advisory limitations
 remain in the report and cannot excuse a required defect.
 
 `validate_receipt` recomputes the outcome from current target and artifact bytes;
-it rejects altered manifests and expired/forged receipts. Consumers must use this
+it requires persisted `report_bytes` and rejects altered manifests, mismatched
+reports and expired/forged receipts. Consumers must use this
 operation at the gate. Hashes provide binding, not signatures or authentication.
 The caller must protect the receipt, criteria and readback sources from producers.
 Any push, rebase, deployment, evidence refresh, material config/tool change or
@@ -81,9 +96,19 @@ expired session requires a fresh verifier run. There is no automatic repair loop
 
 `qa-report.md` retains the v0.2.1 field names, including RESULT, MODE, SCOPE, INTENT,
 INDEPENDENCE, TARGET_FINGERPRINT, EVIDENCE_SNAPSHOT, CRITERIA_MATRIX, FINDINGS,
-INDEPENDENT_CHECKS, EVIDENCE, ARTIFACTS, SKIPPED_OR_INCONCLUSIVE, RISKS,
+INDEPENDENT_CHECKS, EVIDENCE, ARTIFACTS, SKIPPED_OR_INCONCLUSIVE, RISK, RISKS,
 INVALIDATION_TRIGGERS, PUBLICATION and RECOMMENDATION. It is a local technical
 record. Human summaries are separate reviewed text.
+
+The report includes `CRITERION_TOTALS` and an explicit `RISK` field; `RISKS`
+remains a compatibility alias. Render the report as exact UTF-8 bytes, then hash
+those bytes into the receipt. The report never renders `report_sha256` or a hash
+of the receipt, so the dependency is not circular. `bind_report` renews this
+binding after publication statuses change. Consumption checks both the persisted
+bytes' digest and their match to the canonical render of the supplied manifest
+and receipt. Modified, missing, swapped and mixed-generation reports fail closed.
+Persist the regenerated report first and its receipt last. An interruption between
+these writes cannot turn mismatched generations into a valid completion packet.
 
 ## Result publication
 
@@ -108,9 +133,22 @@ identities need explicit owner reconciliation, never guessed conversion.
 
 One publisher owns a packet/target window. No service-side conditional comment
 creation exists in this adapter: competing writers require external serialization.
-The adapter rechecks target and destination before each write. A change invalidates
-the verdict; a transport failure records `failed` and leaves a conclusive verdict
+After remote discovery, immediately before writing or reusing a comment, and after
+transport readback, the publisher rechecks destination binding, live target and
+current time/expiry. Its clock is sampled after remote work; the old fixed `now`
+argument has been replaced by a callable `clock` for deterministic tests only.
+A known-stale result returns BLOCKED with `stale` publication status and preserves
+any returned comment location for owner reconciliation. It does not automatically
+send an unreviewed replacement message or claim current publication success.
+
+These checks cannot atomically lock a remote target against a concurrent push or
+deployment. A mutation after the last read, or a write/readback timeout, may still
+leave a stale remote comment. Owners reconcile using the bound marker and recorded
+location; gate consumers must always reread the target and validate the exact
+receipt/report/evidence packet. A comment is never the clearance authority.
+
+A transport failure records `failed` and leaves a conclusive verdict
 unchanged. A required-publication workflow remains incomplete until every required
 destination succeeds, even if the product verdict is PASS. Persist the returned
-publication receipt and regenerated report locally; never retry from only a cached
+regenerated report and renewed publication receipt locally; never retry from only a cached
 success flag. Comment text is informational and must never substitute for a fresh gate.

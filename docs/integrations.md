@@ -15,7 +15,7 @@ not rerun all unchanged tests for ceremony or treat a producer summary as proof.
 
 The harness creates a manifest and a fresh target snapshot, calls `evaluate`,
 and retains the report/manifest/receipt plus artifact bytes. The merge/closure
-owner calls `validate_receipt` against a newly read target immediately before
+owner calls `validate_receipt` with the persisted report bytes against a newly read target immediately before
 using PASS. Final Boss never merges or closes anything itself. A failed or blocked
 No Mistakes result cannot be represented as successful handoff evidence.
 
@@ -63,9 +63,11 @@ from final_boss.report import report
 # These inputs come from the trusted verifier/owner, after applying active
 # communication guidance and reviewing this exact body and destination list.
 updated_receipt = publish(manifest, receipt, evidence_root, transport,
-                          reviewed_body, explicit_approval)
-updated_report = report(manifest, updated_receipt)
-# Persist both in the verifier-owned local report directory.
+                          reviewed_body, explicit_approval,
+                          report_bytes=persisted_report_bytes)
+updated_report_bytes = report(manifest, updated_receipt).encode("utf-8")
+# Persist updated_report_bytes first, then updated_receipt, in the owned directory.
+# publish renews report_sha256 whenever it updates the report's publication state.
 ```
 
 `explicit_approval` contains `reviewed: true`, `body_sha256`, and exact destination

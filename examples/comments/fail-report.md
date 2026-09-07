@@ -1,10 +1,10 @@
 # Final Boss QA report
 
-RESULT: PASS
+RESULT: FAIL
 
 MODE: deliverable
 
-DECISION_MEANING: Review of this tested workflow; no merge, closure, deployment or mutation authority.
+DECISION_MEANING: A required criterion failed. The named producer owns bounded rework, followed by fresh verification.
 
 SCOPE: {"base": "synthetic-demo-v1", "configuration_sha256": "0000000000000000000000000000000000000000000000000000000000000000", "environment": "local-synthetic", "kind": "interaction", "locator": "http://127.0.0.1:8765/demo.html", "revision": "7a3419f514da56d5982d5f486ab1c1519653992a446f9226c5bf9ad66e136226"}
 
@@ -14,15 +14,15 @@ INDEPENDENCE: {"attestation": "SIMULATED session admission for contract tests on
 
 TARGET_FINGERPRINT: f1495fe485c979eeb2bd85961d6af410a1ca7255e2963227e1384931783b7386
 
-EVIDENCE_SNAPSHOT: a6fe49b32f8d6b291ce190539799ed4543f3da96d1b581c971faf3c96bb7484d
+EVIDENCE_SNAPSHOT: c1db50ae48ce9d4e12b6cc11ac3823f6a842a00ef21a64092945e10a856231cd
 
 CRITERIA_MATRIX: [{"description": "Two clicks reach Step 2 of 2 in order, with current layout proof.", "id": "demo", "profile": "interaction", "required": true, "sequence": true, "viewports": [{"height": 640, "width": 960}], "visual": true}]
 
-CRITERION_TOTALS: {"advisory": {"blocked": 0, "failed": 0, "passed": 0, "total": 0}, "required": {"blocked": 0, "failed": 0, "passed": 1, "total": 1}}
+CRITERION_TOTALS: {"advisory": {"blocked": 0, "failed": 0, "passed": 0, "total": 0}, "required": {"blocked": 0, "failed": 1, "passed": 0, "total": 1}}
 
-FINDINGS: []
+FINDINGS: [{"action": "Demo producer: repair the second transition only, then request a fresh check.", "artifact_ids": ["screen", "sequence"], "code": "required-defect", "criterion_id": "demo", "disposition": "rework", "impact": "The required criterion failed.", "observation": "The second click incorrectly remained at Step 1.", "owner": "demo producer", "severity": "error"}]
 
-INDEPENDENT_CHECKS: [{"action": "Correct only the failed step and request fresh verification.", "artifact_ids": ["screen", "sequence"], "criterion_id": "demo", "id": "two-clicks", "observation": "Observed Step 0, then Step 1, then Step 2 with an isolated synthetic page.", "owner": "demo producer", "status": "pass"}]
+INDEPENDENT_CHECKS: [{"action": "Demo producer: repair the second transition only, then request a fresh check.", "artifact_ids": ["screen", "sequence"], "criterion_id": "demo", "id": "two-clicks", "observation": "The second click incorrectly remained at Step 1.", "owner": "demo producer", "status": "fail"}]
 
 EVIDENCE: [{"artifacts": ["screen", "sequence"], "check": "two-clicks"}]
 
@@ -38,4 +38,4 @@ INVALIDATION_TRIGGERS: Any target, base, environment, configuration, evidence, c
 
 PUBLICATION: [{"comment_locator": null, "destination_id": "pr", "reason": null, "status": "not-authorized"}, {"comment_locator": null, "destination_id": "issue", "reason": null, "status": "not-authorized"}, {"comment_locator": null, "destination_id": "worker", "reason": null, "status": "not-authorized"}]
 
-RECOMMENDATION: Review of this tested workflow; no merge, closure, deployment or mutation authority.
+RECOMMENDATION: A required criterion failed. The named producer owns bounded rework, followed by fresh verification.

@@ -116,14 +116,14 @@ class GateTests(GateFixture, unittest.TestCase):
 
     def test_receipt_rechecks_target_manifest_bytes_and_expiry(self):
         receipt = self.evaluate()
-        self.assertTrue(validate_receipt(receipt, self.m, self.evidence, self.target, now=self.now))
+        self.assertTrue(validate_receipt(receipt, self.m, self.evidence, self.target, report_bytes=report(self.m, receipt).encode(), now=self.now))
         for field in ("revision", "base", "environment", "configuration_sha256"):
             target = copy.deepcopy(self.target); target[field] = "f" * 64
-            with self.assertRaises(ValueError): validate_receipt(receipt, self.m, self.evidence, target, now=self.now)
+            with self.assertRaises(ValueError): validate_receipt(receipt, self.m, self.evidence, target, report_bytes=report(self.m, receipt).encode(), now=self.now)
         with self.assertRaises(ValueError):
-            validate_receipt(receipt, self.m, self.evidence, self.target, now=self.now + timedelta(hours=2))
+            validate_receipt(receipt, self.m, self.evidence, self.target, report_bytes=report(self.m, receipt).encode(), now=self.now + timedelta(hours=2))
         self.m["intent"] += " New criteria."
-        with self.assertRaises(ValueError): validate_receipt(receipt, self.m, self.evidence, self.target, now=self.now)
+        with self.assertRaises(ValueError): validate_receipt(receipt, self.m, self.evidence, self.target, report_bytes=report(self.m, receipt).encode(), now=self.now)
 
     def test_forged_gate_boolean_rejected(self):
         receipt = self.evaluate(); receipt["verdict"] = "FAIL"
@@ -154,7 +154,7 @@ class GateTests(GateFixture, unittest.TestCase):
         self.assertEqual(2, subprocess.run(args, env=env, capture_output=True).returncode)
         self.assertFalse((target_root / "reports").exists())
         receipt = json.loads((output / "final-boss-receipt.json").read_text())
-        self.assertTrue(validate_receipt(receipt, self.m, self.evidence, self.target))
+        self.assertTrue(validate_receipt(receipt, self.m, self.evidence, self.target, report_bytes=(output / "qa-report.md").read_bytes()))
 
     def test_report_legacy_field_contract(self):
         result = report(self.m, self.evaluate())
@@ -193,16 +193,16 @@ class PublicationTests(GateFixture, unittest.TestCase):
 
     def test_all_destinations_idempotent_and_retry_after_timeout(self):
         receipt, body, approval, t = self.publish_setup(); t.timeout_once = True
-        result = publish(self.m, receipt, self.evidence, t, body, approval, now=self.now)
+        result = publish(self.m, receipt, self.evidence, t, body, approval, report_bytes=report(self.m, receipt).encode(), clock=lambda: self.now)
         self.assertEqual("PASS", result["verdict"])
         self.assertEqual("failed", result["publication"][0]["status"])
-        result = publish(self.m, result, self.evidence, t, body, approval, now=self.now)
+        result = publish(self.m, result, self.evidence, t, body, approval, report_bytes=report(self.m, result).encode(), clock=lambda: self.now)
         self.assertEqual(3, t.writes)
         self.assertTrue(all(p["status"] == "published" for p in result["publication"]))
 
     def test_publication_failure_does_not_change_verdict(self):
         receipt, body, approval, t = self.publish_setup(); t.fail = {"issue"}
-        result = publish(self.m, receipt, self.evidence, t, body, approval, now=self.now)
+        result = publish(self.m, receipt, self.evidence, t, body, approval, report_bytes=report(self.m, receipt).encode(), clock=lambda: self.now)
         self.assertEqual("PASS", result["verdict"]); self.assertTrue(result["gate_cleared"])
         self.assertEqual(["published", "failed", "published"], [p["status"] for p in result["publication"]])
         self.assertNotIn("private transport detail", json.dumps(result))
@@ -210,18 +210,18 @@ class PublicationTests(GateFixture, unittest.TestCase):
     def test_no_authority_inferred_from_association(self):
         receipt, body, approval, t = self.publish_setup()
         self.m["destinations"][1]["authorized"] = False; receipt = self.evaluate()
-        result = publish(self.m, receipt, self.evidence, t, body, approval, now=self.now)
+        result = publish(self.m, receipt, self.evidence, t, body, approval, report_bytes=report(self.m, receipt).encode(), clock=lambda: self.now)
         self.assertNotIn("issue", t.comments)
         self.assertEqual("not-authorized", result["publication"][1]["status"])
 
     def test_unreviewed_summary_is_never_sent(self):
         receipt, body, approval, t = self.publish_setup()
-        with self.assertRaises(ValueError): publish(self.m, receipt, self.evidence, t, body + "unreviewed", approval, now=self.now)
+        with self.assertRaises(ValueError): publish(self.m, receipt, self.evidence, t, body + "unreviewed", approval, report_bytes=report(self.m, receipt).encode(), clock=lambda: self.now)
         self.assertEqual({}, t.comments)
 
     def test_target_changed_before_comment_invalidates_pass(self):
         receipt, body, approval, t = self.publish_setup(); t.target = {**self.target, "revision": "new"}
-        result = publish(self.m, receipt, self.evidence, t, body, approval, now=self.now)
+        result = publish(self.m, receipt, self.evidence, t, body, approval, report_bytes=report(self.m, receipt).encode(), clock=lambda: self.now)
         self.assertEqual("BLOCKED", result["verdict"]); self.assertFalse(result["gate_cleared"])
         self.assertEqual({}, t.comments)
 
